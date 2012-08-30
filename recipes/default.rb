@@ -41,10 +41,22 @@ directory "#{node[:jenkins][:server][:home]}/.ssh" do
   group node[:jenkins][:server][:group]
 end
 
-execute "ssh-keygen -f #{pkey} -N ''" do
-  user  node[:jenkins][:server][:user]
-  group node[:jenkins][:server][:group]
-  not_if { File.exists?(pkey) }
+#cookbook_file "/tmp/private_code/wrapssh4git.sh" do
+#  source "wrapssh4git.sh"
+#  owner node[:jenkins][:server][:user]
+#  mode 0700
+#end
+
+cookbook_file "#{node[:jenkins][:server][:home]}/.ssh/id_rsa" do
+    source "id_rsa"
+    owner node[:jenkins][:server][:user]
+    mode 600
+end
+
+cookbook_file "#{node[:jenkins][:server][:home]}/.ssh/id_rsa.pub" do
+    source "id_rsa.pub"
+    owner node[:jenkins][:server][:user]
+    mode 644
 end
 
 ruby_block "store jenkins ssh pubkey" do
@@ -53,6 +65,7 @@ ruby_block "store jenkins ssh pubkey" do
   end
 end
 
+#Install plugins
 directory "#{node[:jenkins][:server][:home]}/plugins" do
   owner node[:jenkins][:server][:user]
   group node[:jenkins][:server][:group]
@@ -71,18 +84,53 @@ end
 
 case node.platform
 when "ubuntu", "debian"
-  include_recipe "apt"
-  include_recipe "java"
+  # See http://jenkins-ci.org/debian/
+
+  case node.platform
+  when "debian"
+    remote = "#{node[:jenkins][:mirror]}/latest/debian/jenkins.deb"
+    package_provider = Chef::Provider::Package::Dpkg
+
+    package "daemon"
+    # These are both dependencies of the jenkins deb package
+    package "jamvm"
+    package "openjdk-6-jre"
+
+    package "psmisc"
+    key_url = "http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key"
+
+    remote_file "#{tmp}/jenkins-ci.org.key" do
+      source "#{key_url}"
+    end
+
+    execute "add-jenkins-key" do
+      command "apt-key add #{tmp}/jenkins-ci.org.key"
+      action :nothing
+    end
+
+  when "ubuntu"
+    key_url = "http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key"
+
+    include_recipe "apt"
+    include_recipe "java"
+
+    cookbook_file "/etc/apt/sources.list.d/jenkins.list" do
+      owner "root"
+      group "root"
+      mode  "0644"
+    end
+
+    execute "add-jenkins-key" do
+      command "wget -q -O - #{key_url} | sudo apt-key add -"
+      action :nothing
+      notifies :run, "execute[apt-get update]", :immediately
+    end
+  end
 
   pid_file = "/var/run/jenkins/jenkins.pid"
   install_starts_service = true
 
-  apt_repository "jenkins" do
-    uri "#{node.jenkins.package_url}/debian"
-    components %w[binary/]
-    key "http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key"
-    action :add
-  end
+
 when "centos", "redhat"
   include_recipe "yum"
 
@@ -145,20 +193,55 @@ ruby_block "block_until_operational" do
   action :nothing
 end
 
-log "jenkins: install and start" do
-  notifies :install, "package[jenkins]", :immediately
-  notifies :start, "service[jenkins]", :immediately unless install_starts_service
-  notifies :create, "ruby_block[block_until_operational]", :immediately
-  not_if do
-    File.exists? "/usr/share/jenkins/jenkins.war"
+if node.platform == "ubuntu"
+  execute "setup-jenkins" do
+    command "echo w00t"
+    notifies :stop, "service[jenkins]", :immediately
+    notifies :create, "ruby_block[netstat]", :immediately #wait a moment for the port to be released
+    notifies :run, "execute[add-jenkins-key]", :immediately
+    notifies :install, "package[jenkins]", :immediately
+    unless install_starts_service
+      notifies :start, "service[jenkins]", :immediately
+    end
+    notifies :create, "ruby_block[block_until_operational]", :immediately
+    creates "/usr/share/jenkins/jenkins.war"
+  end
+else
+  local = File.join(tmp, File.basename(remote))
+
+  remote_file local do
+    source remote
+    backup false
+    notifies :stop, "service[jenkins]", :immediately
+    notifies :create, "ruby_block[netstat]", :immediately #wait a moment for the port to be released
+    notifies :run, "execute[add-jenkins-key]", :immediately
+    notifies :install, "package[jenkins]", :immediately
+    unless install_starts_service
+      notifies :start, "service[jenkins]", :immediately
+    end
+    if node[:jenkins][:server][:use_head] #XXX remove when CHEF-1848 is merged
+      action :nothing
+    end
+  end
+
+  http_request "HEAD #{remote}" do
+    only_if { node[:jenkins][:server][:use_head] } #XXX remove when CHEF-1848 is merged
+    message ""
+    url remote
+    action :head
+    if File.exists?(local)
+      headers "If-Modified-Since" => File.mtime(local).httpdate
+    end
+    notifies :create, "remote_file[#{local}]", :immediately
   end
 end
 
-template "/etc/default/jenkins"
-
+#this is defined after http_request/remote_file because the package
+#providers will throw an exception if `source' doesn't exist
 package "jenkins" do
+  provider package_provider
+  source local if node.platform != "ubuntu"
   action :nothing
-  notifies :create, "template[/etc/default/jenkins]", :immediately
 end
 
 # restart if this run only added new plugins
