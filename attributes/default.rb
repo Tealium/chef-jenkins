@@ -122,7 +122,7 @@ default[:jenkins][:node][:jvm_options] = nil
 default[:jenkins][:node][:ssh_private_key] = nil
 
 default[:jenkins][:http_proxy][:variant]              = nil
-default[:jenkins][:http_proxy][:www_redirect]         = "disable"
+default[:jenkins][:http_proxy][:www_redirect]         = "enable"
 default[:jenkins][:http_proxy][:listen_ports]         = [ 80 ]
 default[:jenkins][:http_proxy][:host_name]            = nil
 default[:jenkins][:http_proxy][:host_aliases]         = []
