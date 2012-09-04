@@ -35,28 +35,36 @@ directory node[:jenkins][:server][:home] do
   group node[:jenkins][:server][:group]
 end
 
-directory "#{node[:jenkins][:server][:home]}/.ssh" do
-  mode 0700
-  owner node[:jenkins][:server][:user]
-  group node[:jenkins][:server][:group]
-end
 
-#cookbook_file "/tmp/private_code/wrapssh4git.sh" do
-#  source "wrapssh4git.sh"
-#  owner node[:jenkins][:server][:user]
-#  mode 0700
-#end
+if node[:jenkins][:deploy_ssh] then
 
-cookbook_file "#{node[:jenkins][:server][:home]}/.ssh/id_rsa" do
-    source "id_rsa"
+   Chef::Log.info("Using repo #{node[:jenkins][:profile_name]} ")
+   jenkins_keys = search(:jenkins_keys, "id:#{node[:jenkins][:profile_name]}").first
+
+   
+   node[:jenkins][:development][:public_key] = jenkins_keys["public_key"] 
+   node[:jenkins][:development][:private_key] = jenkins_keys["private_key"]
+
+  directory "#{node[:jenkins][:server][:home]}/.ssh" do
+    mode 0700
     owner node[:jenkins][:server][:user]
-    mode 600
-end
+    group node[:jenkins][:server][:group]
+  end
 
-cookbook_file "#{node[:jenkins][:server][:home]}/.ssh/id_rsa.pub" do
-    source "id_rsa.pub"
-    owner node[:jenkins][:server][:user]
-    mode 644
+   file "#{node[:jenkins][:server][:home]}/.ssh/id_rsa" do
+      Chef::Log.info("The private_key is: #{node[:jenkins][:development][:private_key]}")
+      content node[:jenkins][:development][:private_key]
+      owner node[:jenkins][:server][:user]
+      mode 0600
+   end
+
+   file "#{node[:jenkins][:server][:home]}/.ssh/id_rsa.pub" do
+      Chef::Log.info("The private_key is: #{node[:jenkins][:development][:public_key]}")
+      content node[:jenkins][:development][:public_key]
+      owner node[:jenkins][:server][:user]
+      mode 0644
+   end
+
 end
 
 ruby_block "store jenkins ssh pubkey" do

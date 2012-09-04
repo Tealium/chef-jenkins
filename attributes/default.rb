@@ -49,6 +49,12 @@ default[:jenkins][:server][:plugins] = []
 #set to true if you have the CHEF-1848 patch applied
 default[:jenkins][:server][:use_head] = false
 
+
+default[:jenkins][:deploy_ssh]  = true
+default[:jenkins][:profile_name]  = "development"
+default[:jenkins][:development][:public_key] = nil
+default[:jenkins][:development][:private_key] = nil
+
 #See Jenkins >> Nodes >> $name >> Configure
 
 #"Name"
