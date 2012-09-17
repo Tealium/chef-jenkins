@@ -42,8 +42,8 @@ if node[:jenkins][:deploy_ssh] then
    jenkins_keys = search(:jenkins_keys, "id:#{node[:jenkins][:profile_name]}").first
 
    
-   node[:jenkins][:development][:public_key] = jenkins_keys["public_key"] 
-   node[:jenkins][:development][:private_key] = jenkins_keys["private_key"]
+   node[:jenkins][:server][:public_key] = jenkins_keys["public_key"] 
+   node[:jenkins][:server][:private_key] = jenkins_keys["private_key"]
 
   directory "#{node[:jenkins][:server][:home]}/.ssh" do
     mode 0700
@@ -52,26 +52,35 @@ if node[:jenkins][:deploy_ssh] then
   end
 
    file "#{node[:jenkins][:server][:home]}/.ssh/id_rsa" do
-      Chef::Log.info("The private_key is: #{node[:jenkins][:development][:private_key]}")
-      content node[:jenkins][:development][:private_key]
+      Chef::Log.info("The pem_key is: #{node[:jenkins][:server][:private_key]}")
+      content node[:jenkins][:server][:private_key]
       owner node[:jenkins][:server][:user]
       mode 0600
    end
 
    file "#{node[:jenkins][:server][:home]}/.ssh/id_rsa.pub" do
-      Chef::Log.info("The private_key is: #{node[:jenkins][:development][:public_key]}")
-      content node[:jenkins][:development][:public_key]
+      Chef::Log.info("The public_key is: #{node[:jenkins][:server][:public_key]}")
+      content node[:jenkins][:server][:public_key]
       owner node[:jenkins][:server][:user]
       mode 0644
    end
 
+   ruby_block "store jenkins ssh pubkey" do
+     block do
+       node.set[:jenkins][:server][:pubkey] = File.open("#{pkey}.pub") { |f| f.gets }
+     end
+   end
+
+   file "#{node[:jenkins][:server][:home]}/.ssh/authorized_keys" do
+     action :create
+     mode 0600
+     owner node[:jenkins][:server][:user]
+     group node[:jenkins][:server][:user]
+     content node[:jenkins][:server][:pubkey]
+   end
+
 end
 
-ruby_block "store jenkins ssh pubkey" do
-  block do
-    node.set[:jenkins][:server][:pubkey] = File.open("#{pkey}.pub") { |f| f.gets }
-  end
-end
 
 #Install plugins
 directory "#{node[:jenkins][:server][:home]}/plugins" do

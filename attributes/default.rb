@@ -30,12 +30,12 @@ default[:jenkins][:server][:user] = "jenkins"
 
 case node[:platform]
 when "debian", "ubuntu"
-  default[:jenkins][:server][:group] = "nogroup"
+  default[:jenkins][:server][:group] = "admin"
 else
   default[:jenkins][:server][:group] = node[:jenkins][:server][:user]
 end
 
-default[:jenkins][:server][:port] = 8080
+default[:jenkins][:server][:port] = 80
 default[:jenkins][:server][:host] = node[:fqdn]
 default[:jenkins][:server][:url]  = "http://#{node[:jenkins][:server][:host]}:#{node[:jenkins][:server][:port]}"
 
@@ -43,7 +43,7 @@ default[:jenkins][:iptables_allow] = "disable"
 
 #download the latest version of plugins, bypassing update center
 #example: ["git", "URLSCM", ...]
-default[:jenkins][:server][:plugins] = []
+default[:jenkins][:server][:plugins] = ["git", "github", "ghprb", "github-api", "multiple-scms", "ec2"]
 
 #working around: http://tickets.opscode.com/browse/CHEF-1848
 #set to true if you have the CHEF-1848 patch applied
@@ -52,8 +52,8 @@ default[:jenkins][:server][:use_head] = false
 
 default[:jenkins][:deploy_ssh]  = true
 default[:jenkins][:profile_name]  = "development"
-default[:jenkins][:development][:public_key] = nil
-default[:jenkins][:development][:private_key] = nil
+default[:jenkins][:server][:public_key] = nil
+default[:jenkins][:server][:private_key] = nil
 
 #See Jenkins >> Nodes >> $name >> Configure
 

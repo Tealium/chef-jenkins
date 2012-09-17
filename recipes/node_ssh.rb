@@ -30,8 +30,9 @@ unless node[:jenkins][:server][:pubkey]
   node.set[:jenkins][:server][:pubkey] = jenkins_node[:jenkins][:server][:pubkey]
 end
 
-group node[:jenkins][:node][:user] do
-end
+Chef::Log.info(node[:jenkins][:node][:user])
+
+
 
 user node[:jenkins][:node][:user] do
   comment "Jenkins CI node (ssh)"
