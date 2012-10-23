@@ -35,7 +35,7 @@ else
   default[:jenkins][:server][:group] = node[:jenkins][:server][:user]
 end
 
-default[:jenkins][:server][:port] = 80
+default[:jenkins][:server][:port] = 8080
 default[:jenkins][:server][:host] = node[:fqdn]
 default[:jenkins][:server][:url]  = "http://#{node[:jenkins][:server][:host]}:#{node[:jenkins][:server][:port]}"
 
@@ -43,7 +43,10 @@ default[:jenkins][:iptables_allow] = "disable"
 
 #download the latest version of plugins, bypassing update center
 #example: ["git", "URLSCM", ...]
-default[:jenkins][:server][:plugins] = ["git", "github", "ghprb", "github-api", "multiple-scms", "ec2"]
+default[:jenkins][:server][:plugins] = ["git", "github", "ghprb", "github-api", "multiple-scms", "ec2","maven-plugin", "maven-dependency-update-trigger", "chucknorris", "build-pipeline-plugin",
+                                       "ruby-runtime", "ruby", "scp", "ssh", "ssh-credentials", "publish-over-ssh", "seleniumrc-plugin", "selenium", "seleniumhq", "xvnc", "seleniumhtmlreport",
+                                       "email-ext", "translation", "selenium-aes", "testingbot"
+                                       ]
 
 #working around: http://tickets.opscode.com/browse/CHEF-1848
 #set to true if you have the CHEF-1848 patch applied
