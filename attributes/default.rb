@@ -28,6 +28,8 @@ default[:jenkins][:java_home] = ENV['JAVA_HOME']
 default[:jenkins][:server][:home] = "/var/lib/jenkins"
 default[:jenkins][:server][:user] = "jenkins"
 
+default[:jenkins][:jently] = "/var/lib/Jently"
+
 case node[:platform]
 when "debian", "ubuntu"
   default[:jenkins][:server][:group] = "admin"
@@ -45,7 +47,7 @@ default[:jenkins][:iptables_allow] = "disable"
 #example: ["git", "URLSCM", ...]
 default[:jenkins][:server][:plugins] = ["git", "github", "ghprb", "github-api", "multiple-scms", "ec2","maven-plugin", "maven-dependency-update-trigger", "chucknorris", "build-pipeline-plugin",
                                        "ruby-runtime", "ruby", "scp", "ssh", "ssh-credentials", "publish-over-ssh", "seleniumrc-plugin", "selenium", "seleniumhq", "xvnc", "seleniumhtmlreport",
-                                       "email-ext", "translation", "selenium-aes", "testingbot", "maven-invoker-plugin", ""]
+                                       "email-ext", "translation", "selenium-aes", "testingbot", "maven-invoker-plugin"]
 
 #working around: http://tickets.opscode.com/browse/CHEF-1848
 #set to true if you have the CHEF-1848 patch applied

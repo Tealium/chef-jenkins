@@ -1,0 +1,22 @@
+#!/bin/bash
+export GIT_SSH=<%= @sshwrapper %>
+
+JENTLY_DIR=<%= @directory %>
+
+pushd /
+if ls $JENTLY_DIR 1> /dev/null ; then
+   cd $JENTLY_DIR 
+   if git status 1> /dev/null; then
+      echo "going to update repo."
+      git remote update
+      git merge -s ours origin/master 
+      exit 0
+   else
+      echo "directory ($JENTLY_DIR) already exists -- but not a repo, not doing anything."
+      exit 1;
+   fi
+else   
+	echo "cloning data, this can take a while."
+	sudo mkdir $JENTLY_DIR
+	sudo git clone https://github.com/Tealium/Jently.git $JENTLY_DIR
+fi

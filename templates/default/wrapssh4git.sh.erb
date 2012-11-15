@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+export HOME=<%= @home_dir %>
+/usr/bin/ssh -q -o "StrictHostKeyChecking=no" -i "<%= @ssh_key %>" $1 $2
+
