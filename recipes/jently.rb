@@ -85,7 +85,8 @@ template "#{node[:jenkins][:jently]}/config/config.yaml" do
 	:jenkins_polling_interval_seconds => jently_config["jenkins_polling_interval_seconds"],	
 	:testing_branch_name => jently_config["testing_branch_name"],	
 	:tester_username => jently_config["tester_username"],	
-	:tester_comment => jently_config["tester_comment"]
+	:tester_comment => jently_config["tester_comment"],
+  :remote_name => jently_config["remote_name"]
  )
 end
 

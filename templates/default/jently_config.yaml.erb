@@ -22,6 +22,8 @@
 
 # The Jenkins build job for testing that you set up in step 2 of the installation
 # guide at https://github.com/vaneyckt/Jently/blob/master/README.rdoc.
+#Also the text after the : in the tester comment needs to be the same as the first part of the jenkins_job name.
+#Example the comment build:QA creates the QA_pull_request_test_branch_jenkins branch in Github.
 :jenkins_job_name: <%= @jenkins_job_name %>
 
 # The amount of time Jently will wait for a test job to complete before marking it
@@ -40,10 +42,17 @@
 
 #This user will comment in the pull request when they want Jenkins to build out the
 #specific pull request onto the QA Server
-:tester_username: <%= @tester_username %>
+:tester_username:  
+<% @tester_username.each do |username| %>
+   - <%= username %>
+<% end %>
 
 #This is the comment the the tester needs to leave as a comment on the speficic pull request
 #that they would like to test.
+#Also the text after the : needs to be the same as the first part of the Jenkins_job name.
+#Example the comment build:QA creates the QA_pull_request_test_branch_jenkins branch in Github.
 :tester_comment: <%= @tester_comment %>
+
+:remote_name: <%= @remote_name %>
 
 ...

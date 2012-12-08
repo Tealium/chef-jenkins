@@ -84,7 +84,7 @@ node["update_llnw"].each do |environment|
      Chef::Log.info("This is what the environment is #{environment.first}")
 
      variables(
-      :source_dir       => node["update_llnw"]["#{environment.first}"]["llnw"]["source_dirs"],
+      :source_dir       => node["update_llnw"]["#{environment.first}"]["source_dirs"],
       :ftp_username     => node["update_llnw"]["#{environment.first}"]["ftp"]["username"],
       :ftp_password     => node["update_llnw"]["#{environment.first}"]["ftp"]["password"],
       :ftp_url          => node["update_llnw"]["#{environment.first}"]["ftp"]["url"],
