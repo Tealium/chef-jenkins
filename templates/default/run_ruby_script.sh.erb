@@ -1,3 +1,5 @@
 #!/bin/bash
-cd /var/lib/Jently
+JENTLY_DIR=<%= @directory %>
+
+cd $JENTLY_DIR 
 sudo ruby jently_control.rb start
