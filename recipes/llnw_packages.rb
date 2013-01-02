@@ -46,6 +46,10 @@ include_recipe "perl"
   libipc-run3-perl
   make
   libconfig-json-perl
+  libdigest-perl
+  libright-aws-ruby 
+  libfile-slurp-perl
+  build-essential
 ).each do |pak|
     package pak do 
        action :install 
