@@ -41,7 +41,7 @@ end
     mode 0555
     variables(
     :sshwrapper => '/tmp/private_code/wrapssh4git.sh',
-    :directory => "/var/lib/jenkins_scripts"
+    :directory => "/var/lib/server_scripts"
    )
   end
 
@@ -49,7 +49,7 @@ end
     action :run
   end
 
-git "/var/lib/jenkins_scripts" do
+git "/var/lib/server_scripts" do
       Chef::Log.info("Checking out repository: #{node["scripts_repo"]["repo"]}")
      repository node["scripts_repo"]["repo"]
   		user node[:jenkins][:server][:user]
