@@ -29,9 +29,8 @@ node["tc.server"].each do |tags|
      source "tag_companion_config.json.erb"
      mode 0444
      variables(
-       :main => node["tc.server"]["#{tags.first}"]["main"],
-       :root => node["tc.server"]["#{tags.first}"]["root"]
-     )
+   	   :companion => node["tc.server"]["#{tags.first}"].nil? ? "{}" : node["tc.server"]["#{tags.first}"].to_hash.to_json
+   )
   end
 end
 

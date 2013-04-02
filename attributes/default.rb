@@ -28,7 +28,7 @@ default[:jenkins][:java_home] = ENV['JAVA_HOME']
 default[:jenkins][:server][:home] = "/var/lib/jenkins"
 default[:jenkins][:server][:user] = "jenkins"
 
-default[:jenkins][:jently] = "/var/lib"
+default[:jenkins][:jently] = "/var/lib/Jently"
 
 case node[:platform]
 when "debian", "ubuntu"
