@@ -84,13 +84,9 @@ node["jently_config"].each do |jently|
       :jenkins_login => jently_config["jenkins_login"],
       :jenkins_password => jently_config["jenkins_password"],
       :jenkins_url => jently_config["jenkins_url"], 
-      :jenkins_job_name => jently_config["jenkins_job_name"], 
       :jenkins_job_timeout_seconds => jently_config["jenkins_job_timeout_seconds"], 
       :jenkins_polling_interval_seconds => jently_config["jenkins_polling_interval_seconds"], 
-      :testing_branch_name => jently_config["testing_branch_name"], 
-      :tester_username => jently_config["tester_username"], 
-      :tester_comment => jently_config["tester_comment"],
-      :remote_name => jently_config["remote_name"]
+      :testers => jently_config["testers"]
     )
   end
     
