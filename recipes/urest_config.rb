@@ -33,7 +33,7 @@ node["urest_config"].each do |config|
       :urest_host      		=> node["urest_config"]["#{config.first}"]["urest_host"],
       :urest_port     		=> node["urest_config"]["#{config.first}"]["urest_port"],
       :urest_users_path     => node["urest_config"]["#{config.first}"]["urest_users_path"],
-      :urest_legacy_path    => node["urest_config"]["#{config.first}"]["urest_legacy_path"],
+      :urest_legacy_path    => node["urest_config"]["#{config.first}"]["urest_legacy_path"]
      )
   end
 end
