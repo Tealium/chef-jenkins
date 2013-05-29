@@ -18,13 +18,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include_recipe "git"
+
 directory "/tmp/private_code" do
- action :create
- owner node[:jenkins][:server][:user]
- group node[:jenkins][:server][:user]
+  action :create
+  owner node[:jenkins][:server][:user]
+  group node[:jenkins][:server][:user]
 end
 
-template "/tmp/private_code/wrapssh4git.sh" do
+template "/tmp/private_code/wrapssh4git_data.sh" do
   source "wrapssh4git.sh.erb"
   owner node[:jenkins][:server][:user]
   mode 0700
@@ -34,31 +36,34 @@ template "/tmp/private_code/wrapssh4git.sh" do
   )
 end
 
- template "/tmp/private_code/clone_update_scripts.sh"  do
-    source "clone_update_scripts.sh.erb" 
+#we want to be able to have multiple versions of this gem for the different environments.
+
+  template "/tmp/private_code/clone_update_scripts.sh"  do
+    source "clone_update.sh.erb" 
     owner node[:jenkins][:server][:user]
     group node[:jenkins][:server][:group]
     mode 0555
     variables(
-    :sshwrapper => '/tmp/private_code/wrapssh4git.sh',
-    :directory => "/var/lib/server_scripts"
-   )
+      :sshwrapper => '/tmp/private_code/wrapssh4git_data.sh',
+      :directory => '/var/lib/server_scripts'
+  )
   end
 
- execute "/tmp/private_code/clone_update_scripts.sh" do
+  execute "/tmp/private_code/clone_update_scripts.sh" do
     action :run
   end
 
-git "/var/lib/server_scripts" do
-      Chef::Log.info("Checking out repository: #{node["scripts_repo"]["repo"]}")
-     repository node["scripts_repo"]["repo"]
-  		user node[:jenkins][:server][:user]
-  		group node[:jenkins][:server][:user]
-      revision node["scripts_repo"]["revision"]
-      ssh_wrapper "/tmp/private_code/wrapssh4git.sh"
+#git "/var/lib/server_scripts" do
+#      Chef::Log.info("Checking out repository: #{node["scripts_repo"]["repo"]}")
+#      repository node["scripts_repo"]["repo"]
+#  		user node[:jenkins][:server][:user]
+#  		group node[:jenkins][:server][:user]
+#      revision node["scripts_repo"]["revision"]
+#      ssh_wrapper "/tmp/private_code/wrapssh4git_data.sh"
       # This flag should be set to true if you want chef to 
       # sync the git repo to the latest version each time that it runs.
-      action node["scripts_repo"]["git_sync"] ? :sync : :checkout
-end
+#      action node["scripts_repo"]["git_sync"] ? :sync : :checkout
+
+#end
 
 

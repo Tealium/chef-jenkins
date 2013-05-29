@@ -1,22 +1,21 @@
 #!/bin/bash
 export GIT_SSH=<%= @sshwrapper %>
 
-DIR=<%= @directory %>
+JENTLY_DIR=<%= @directory %>
 
 pushd /
-if ls $DIR 1> /dev/null ; then
-   cd $DIR 
+if ls $JENTLY_DIR 1> /dev/null ; then
+   cd $JENTLY_DIR 
    if git status 1> /dev/null; then
       echo "going to update repo."
-      sudo -u jenkins git pull origin master
+      sudo git pull origin master
       exit 0
    else
-      echo "directory ($DIR) already exists -- but not a repo, not doing anything."
+      echo "directory ($JENTLY_DIR) already exists -- but not a repo, not doing anything."
       exit 1;
    fi
 else   
-   echo "cloning the jenkins scripts repository"
-   sudo mkdir $DIR
-   sudo chown jenkins:jenkins $DIR
-   sudo -u jenkins git clone git@github.com:Tealium/server_scripts.git $DIR
+   echo "cloning the Jently repository"
+   sudo mkdir $JENTLY_DIR
+   sudo git clone https://github.com/Tealium/server_scripts.git $JENTLY_DIR
 fi
