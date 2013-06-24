@@ -40,7 +40,8 @@ if node[:jenkins][:deploy_ssh] then
 
    Chef::Log.info("Using repo #{node[:jenkins][:profile_name]} ")
    jenkins_keys = search(:jenkins_keys, "id:#{node[:jenkins][:profile_name]}").first
-
+    
+    Chef::Log.info("#{jenkins_keys}")
    
    node[:jenkins][:server][:public_key] = jenkins_keys["public_key"] 
    node[:jenkins][:server][:private_key] = jenkins_keys["private_key"]
@@ -111,7 +112,7 @@ when "ubuntu", "debian"
     package "daemon"
     # These are both dependencies of the jenkins deb package
     package "jamvm"
-    package "openjdk-6-jre"
+    package "openjdk-7-jre"
 
     package "psmisc"
     key_url = "http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key"
