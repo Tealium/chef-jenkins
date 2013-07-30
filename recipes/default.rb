@@ -43,8 +43,8 @@ if node[:jenkins][:deploy_ssh] then
     
     Chef::Log.info("#{jenkins_keys}")
    
-   node[:jenkins][:server][:public_key] = jenkins_keys["public_key"] 
-   node[:jenkins][:server][:private_key] = jenkins_keys["private_key"]
+   node.default[:jenkins][:server][:public_key] = jenkins_keys["public_key"] 
+   node.default[:jenkins][:server][:private_key] = jenkins_keys["private_key"]
 
   directory "#{node[:jenkins][:server][:home]}/.ssh" do
     mode 0700
