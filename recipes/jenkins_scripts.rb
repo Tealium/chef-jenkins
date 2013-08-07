@@ -26,7 +26,7 @@ directory "/tmp/private_code" do
   group node[:jenkins][:server][:user]
 end
 
-template "/tmp/private_code/wrapssh4git_data.sh" do
+template "/tmp/private_code/wrapssh4git.sh" do
   source "wrapssh4git.sh.erb"
   owner node[:jenkins][:server][:user]
   mode 0700
@@ -36,34 +36,25 @@ template "/tmp/private_code/wrapssh4git_data.sh" do
   )
 end
 
-#we want to be able to have multiple versions of this gem for the different environments.
+ruby_block "update_scripts_owner" do
+   block do
+      FileUtils.chown_R 'jenkins', 'jenkins', '/var/lib/jenkins/server_scripts'
+   end
+   action :nothing
+end
 
-  template "/tmp/private_code/clone_update_scripts.sh"  do
-    source "clone_update.sh.erb" 
-    owner node[:jenkins][:server][:user]
-    group node[:jenkins][:server][:group]
-    mode 0555
-    variables(
-      :sshwrapper => '/tmp/private_code/wrapssh4git_data.sh',
-      :directory => '/var/lib/server_scripts'
-  )
-  end
-
-  execute "/tmp/private_code/clone_update_scripts.sh" do
-    action :run
-  end
-
-#git "/var/lib/server_scripts" do
-#      Chef::Log.info("Checking out repository: #{node["scripts_repo"]["repo"]}")
-#      repository node["scripts_repo"]["repo"]
-#  		user node[:jenkins][:server][:user]
-#  		group node[:jenkins][:server][:user]
-#      revision node["scripts_repo"]["revision"]
-#      ssh_wrapper "/tmp/private_code/wrapssh4git_data.sh"
+git '/var/lib/jenkins/server_scripts' do
+      
+      Chef::Log.info("Checking out the Server Scripts Repo")
+      repository node[:scripts_repo]["repo"]
+      user node[:jenkins][:server][:user]
+      group node[:jenkins][:server][:group]
+      revision node[:scripts_repo]["revision"]
+      ssh_wrapper "/tmp/private_code/wrapssh4git.sh"
       # This flag should be set to true if you want chef to 
       # sync the git repo to the latest version each time that it runs.
-#      action node["scripts_repo"]["git_sync"] ? :sync : :checkout
-
-#end
+      action node[:scripts_repo]["git_sync"] ? :sync : :checkout
+      notifies :create, "ruby_block[update_scripts_owner]", :immediately
+end
 
 

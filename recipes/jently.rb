@@ -19,25 +19,51 @@
 # limitations under the License.
 #
 
+%w(
+jently
+daemons
+systemu
+faraday
+faraday_middleware
+octokit
+json
+pry
+multi_json
+).each do |pak|
+    gem_package pak do 
+       action :install 
+    end
+end
+
 package "rubygems1.8" do
 	action :install
 end
 
-template "tmp/gemShell.sh" do
-	source "gemShell.sh.erb"
-  	owner node[:jenkins][:server][:user]
-  	group node[:jenkins][:server][:group]
-    mode 0555
-end
-
-execute "tmp/gemShell.sh" do
-	action :run
-end
+#No longer need this shell file.
+#template "tmp/gemShell.sh" do#
+#	source "gemShell.sh.erb"
+#  	owner node[:jenkins][:server][:user]
+#  	group node[:jenkins][:server][:group]
+#    mode 0555
+#end
 
 directory "/tmp/private_code" do
   action :create
   owner node[:jenkins][:server][:user]
   group node[:jenkins][:server][:user]
+end
+
+# Now let's setup things so that we can pull down the repo.
+directory "/tmp/private_code/.ssh" do
+  owner node[:jenkins][:server][:user]
+  recursive true
+end
+
+file "/tmp/private_code/.ssh/id_deploy" do
+   Chef::Log.info("The private_key is: #{node[:jenkins][:server][:private_key]}")
+   content node[:jenkins][:server][:private_key]
+   owner node[:jenkins][:server][:user]
+   mode 0600
 end
 
 template "/tmp/private_code/wrapssh4git_data.sh" do
