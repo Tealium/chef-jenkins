@@ -81,22 +81,22 @@ end
 #    mode 0555
 #end
 
-node["update_llnw"].each do |environment|
+node["jenkins"]["update_llnw"].each do |environment|
   template "/etc/tealium/#{environment.first}.json"  do
      source "update-llnw.json.erb"
      mode 0444
      Chef::Log.info("This is what the environment is #{environment.first}")
 
      variables(
-      :source_dir       => node["update_llnw"]["#{environment.first}"]["source_dirs"],
-      :ftp_username     => node["update_llnw"]["#{environment.first}"]["ftp"]["username"],
-      :ftp_password     => node["update_llnw"]["#{environment.first}"]["ftp"]["password"],
-      :ftp_url          => node["update_llnw"]["#{environment.first}"]["ftp"]["url"],
-      :llnw_shortname   => node["update_llnw"]["#{environment.first}"]["llnw"]["shortname"],
-      :llnw_username    => node["update_llnw"]["#{environment.first}"]["llnw"]["username"],
-      :llnw_password    => node["update_llnw"]["#{environment.first}"]["llnw"]["password"],
-      :llnw_url         => node["update_llnw"]["#{environment.first}"]["llnw"]["url"],
-      :llnw_prepend_dir => node["update_llnw"]["#{environment.first}"]["llnw"]["prepend_dir"]
+      :source_dir       => node["jenkins"]["update_llnw"]["#{environment.first}"]["source_dirs"],
+      :ftp_username     => node["jenkins"]["update_llnw"]["#{environment.first}"]["ftp"]["username"],
+      :ftp_password     => node["jenkins"]["update_llnw"]["#{environment.first}"]["ftp"]["password"],
+      :ftp_url          => node["jenkins"]["update_llnw"]["#{environment.first}"]["ftp"]["url"],
+      :llnw_shortname   => node["jenkins"]["update_llnw"]["#{environment.first}"]["llnw"]["shortname"],
+      :llnw_username    => node["jenkins"]["update_llnw"]["#{environment.first}"]["llnw"]["username"],
+      :llnw_password    => node["jenkins"]["update_llnw"]["#{environment.first}"]["llnw"]["password"],
+      :llnw_url         => node["jenkins"]["update_llnw"]["#{environment.first}"]["llnw"]["url"],
+      :llnw_prepend_dir => node["jenkins"]["update_llnw"]["#{environment.first}"]["llnw"]["prepend_dir"]
      )
   end
 end

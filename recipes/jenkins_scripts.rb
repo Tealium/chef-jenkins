@@ -46,14 +46,14 @@ end
 git '/var/lib/jenkins/server_scripts' do
       
       Chef::Log.info("Checking out the Server Scripts Repo")
-      repository node[:scripts_repo]["repo"]
+      repository node[:jenkins][:scripts_repo]["repo"]
       user node[:jenkins][:server][:user]
       group node[:jenkins][:server][:group]
-      revision node[:scripts_repo]["revision"]
+      revision node[:jenkins][:scripts_repo]["revision"]
       ssh_wrapper "/tmp/private_code/wrapssh4git.sh"
       # This flag should be set to true if you want chef to 
       # sync the git repo to the latest version each time that it runs.
-      action node[:scripts_repo]["git_sync"] ? :sync : :checkout
+      action node[:jenkins][:scripts_repo]["git_sync"] ? :sync : :checkout
       notifies :create, "ruby_block[update_scripts_owner]", :immediately
 end
 

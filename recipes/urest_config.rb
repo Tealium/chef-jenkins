@@ -23,19 +23,19 @@ directory "etc/tealium/urest" do
   group node[:jenkins][:server][:user]
 end
 
-node["urest_config"].each do |config|
+node["jenkins"]["urest_config"].each do |config|
   template "/etc/tealium/urest/#{config.first}.json"  do
      source "config.json.erb"
      mode 0444
      Chef::Log.info("This is what the config is #{config.first}")
 
      variables(
-      :urest_host      		=> node["urest_config"]["#{config.first}"]["urest_host"],
-      :urest_port     		=> node["urest_config"]["#{config.first}"]["urest_port"],
-      :urest_users_path     => node["urest_config"]["#{config.first}"]["urest_users_path"],
-      :urest_legacy_path    => node["urest_config"]["#{config.first}"]["urest_legacy_path"],
-      :utag_host    => node["urest_config"]["#{config.first}"]["utag_host"],
-      :utag_path    => node["urest_config"]["#{config.first}"]["utag_path"]
+      :urest_host      		=> node[:jenkins]["urest_config"]["#{config.first}"]["urest_host"],
+      :urest_port     		=> node[:jenkins]["urest_config"]["#{config.first}"]["urest_port"],
+      :urest_users_path     => node[:jenkins]["urest_config"]["#{config.first}"]["urest_users_path"],
+      :urest_legacy_path    => node[:jenkins]["urest_config"]["#{config.first}"]["urest_legacy_path"],
+      :utag_host    => node[:jenkins]["urest_config"]["#{config.first}"]["utag_host"],
+      :utag_path    => node[:jenkins]["urest_config"]["#{config.first}"]["utag_path"]
      )
   end
 end

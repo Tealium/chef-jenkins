@@ -77,7 +77,7 @@ template "/tmp/private_code/wrapssh4git_data.sh" do
 end
 
 #we want to be able to have multiple versions of this gem for the different environments.
-node["jently_config"].each do |jently|
+node["jenkins"]["jently_config"].each do |jently|
 
   template "/tmp/private_code/clone_update_#{jently}.sh"  do
     source "clone_update.sh.erb" 
