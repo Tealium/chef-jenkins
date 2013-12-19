@@ -36,6 +36,12 @@ template "/tmp/private_code/wrapssh4git.sh" do
   )
 end
 
+directory "#{node[:jenkins][:server][:home]}/mainfest" do
+  action :create
+  owner node[:jenkins][:server][:user]
+  group node[:jenkins][:server][:user]
+end
+
 ruby_block "update_scripts_owner" do
    block do
       FileUtils.chown_R 'jenkins', 'jenkins', '/var/lib/jenkins/server_scripts'
