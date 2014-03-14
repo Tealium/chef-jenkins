@@ -73,3 +73,6 @@
     content "#{node[:jenkins][:server][:user]} ALL=(ALL) NOPASSWD:ALL\n"
   end
 
+
+
+  

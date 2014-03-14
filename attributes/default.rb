@@ -21,7 +21,6 @@
 # limitations under the License.
 #
 
-default["config_name"] = "jenkins"
 default[:jenkins][:mirror] = "http://mirrors.jenkins-ci.org"
 default[:jenkins][:package_url] = "http://pkg.jenkins-ci.org"
 default[:jenkins][:java_home] = ENV['JAVA_HOME']

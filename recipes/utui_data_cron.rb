@@ -23,7 +23,7 @@ cron "update_data_daily" do
 	hour "1"
 	user "jenkins"
   command "rsync -avz --exclude .git -e 'ssh -i /var/run/tealium/chef/chef-deployment' ubuntu@54.215.1.2:/data/utui/data/ /data"
-  action node['jenkins']['disable_data_update'] ? :delete : :create
+  action node['disable_data_update'] ? :delete : :create
 end
 
 #Not going to use this for now

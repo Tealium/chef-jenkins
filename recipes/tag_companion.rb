@@ -24,12 +24,12 @@ directory "/etc/tealium/tagcompanion" do
    recursive true
 end
 
-node["jenkins"]["tc.server"].each do |tags|
+node["tc.server"].each do |tags|
   template "/etc/tealium/tagcompanion/#{tags.first}.json"  do
      source "tag_companion_config.json.erb"
      mode 0444
      variables(
-   	   :companion => node["jenkins"]["tc.server"]["#{tags.first}"].nil? ? "{}" : node["jenkins"]["tc.server"]["#{tags.first}"].to_hash.to_json
+   	   :companion => node["tc.server"]["#{tags.first}"].nil? ? "{}" : node["tc.server"]["#{tags.first}"].to_hash.to_json
    )
   end
 end
