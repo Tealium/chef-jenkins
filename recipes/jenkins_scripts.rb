@@ -20,6 +20,9 @@
 
 include_recipe "git"
 
+# for parsing out the versions from the pom files
+package 'libxml-xpath-perl'
+
 directory "/tmp/private_code" do
   action :create
   owner node[:jenkins][:server][:user]
