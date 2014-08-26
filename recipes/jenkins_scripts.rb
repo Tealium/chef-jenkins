@@ -2,7 +2,7 @@
 # Cookbook Name:: jenkins
 # Recipe:: jenkins_scripts
 #
-# Author:: Jennifer Frisk
+# Author:: Jennifer Mitchell
 #
 # Copyright 2012.
 #
