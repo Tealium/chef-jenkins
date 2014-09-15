@@ -36,7 +36,7 @@ end
 
 cron "update_data_daily_qa05" do 
 	minute "30"
-	hour "1"
+	hour "2"
 	user "jenkins"
 	command "jenkins rsync -avz --exclude .git --exclude '/lost+found' -x -p -e 'ssh -i /var/run/tealium/chef/.chef/qa.pem' /data/accounts/ ubuntu@54.193.46.110:/data/utui/data/accounts"
   action node['disable_data_update'] ? :delete : :create
