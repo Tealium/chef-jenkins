@@ -22,6 +22,7 @@ include_recipe "git"
 
 # for parsing out the versions from the pom files
 package 'libxml-xpath-perl'
+package 'debhelper'
 
 directory "/tmp/private_code" do
   action :create
