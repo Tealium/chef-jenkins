@@ -1,0 +1,60 @@
+{
+   "spiderCfg": {
+      "dataFile":"/tmp/CdnSpider.data", 
+      "exceptionLog":"/tmp/CdnSpiderException.log", 
+      "maxFtpAttempts" : 2, 
+      "sequence" : [
+         {
+            "name" : "limelight",
+            "action": "explore",
+            "depth" : 3,
+            "ignoreDirs" : [
+               "utag",
+               "mike",
+               "bluebean72"
+            ]
+         },
+         {
+            "name" : "akamai",
+            "master" : "limelight",
+            "action": "check"
+         },
+         {
+            "name" : "edgecast",
+            "master" : "limelight",
+            "action": "check"
+         }
+      ]
+   },
+  "cdnInfo": {
+    "limelight": {
+      "explorationRoot": "/mike/colinsulin",
+      "username_ftp": "",
+      "host": "",
+      "password_ftp": ""
+    },
+    "limelightnew": {
+      "shortname": "",
+      "explorationRoot": "content/mike/colinsulin",
+      "host": "",
+      "ftp_users": [
+        {
+          "username_ftp": "",
+          "password_ftp": ""
+        }
+      ]
+    },
+    "akamai": {
+      "explorationRoot": "/182210/mike/colinsulin",
+      "username_ftp": "",
+      "host": "",
+      "password_ftp": ""
+    },
+    "edgecast": {
+      "explorationRoot": "mike/colinsulin",
+      "username_ftp": "",
+      "host": "",
+      "password_ftp": ""
+    }
+  }
+}
