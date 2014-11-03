@@ -88,15 +88,31 @@ node["update_llnw"].each do |environment|
      Chef::Log.info("This is what the environment is #{environment.first}")
 
      variables(
-      :source_dir       => node["update_llnw"]["#{environment.first}"]["source_dirs"],
-      :ftp_username     => node["update_llnw"]["#{environment.first}"]["ftp"]["username"],
-      :ftp_password     => node["update_llnw"]["#{environment.first}"]["ftp"]["password"],
-      :ftp_url          => node["update_llnw"]["#{environment.first}"]["ftp"]["url"],
-      :llnw_shortname   => node["update_llnw"]["#{environment.first}"]["llnw"]["shortname"],
-      :llnw_username    => node["update_llnw"]["#{environment.first}"]["llnw"]["username"],
-      :llnw_password    => node["update_llnw"]["#{environment.first}"]["llnw"]["password"],
-      :llnw_url         => node["update_llnw"]["#{environment.first}"]["llnw"]["url"],
-      :llnw_prepend_dir => node["update_llnw"]["#{environment.first}"]["llnw"]["prepend_dir"]
+      :source_dir              => node["update_llnw"]["#{environment.first}"]["source_dirs"],
+      :llnw_ftp_username       => node["update_llnw"]["#{environment.first}"]["llnw"]["ftp"]["username"],
+      :llnw_ftp_password       => node["update_llnw"]["#{environment.first}"]["llnw"]["ftp"]["password"],
+      :llnw_ftp_url            => node["update_llnw"]["#{environment.first}"]["llnw"]["ftp"]["url"],
+      :llnw_shortname          => node["update_llnw"]["#{environment.first}"]["llnw"]["shortname"],
+      :llnw_username           => node["update_llnw"]["#{environment.first}"]["llnw"]["username"],
+      :llnw_password           => node["update_llnw"]["#{environment.first}"]["llnw"]["password"],
+      :llnw_url                => node["update_llnw"]["#{environment.first}"]["llnw"]["url"],
+      :llnw_prepend_dir        => node["update_llnw"]["#{environment.first}"]["llnw"]["prepend_dir"],
+      :akamai_ftp_username     => node["update_llnw"]["#{environment.first}"]["akamai"]["ftp"]["username"],
+      :akamai_ftp_password     => node["update_llnw"]["#{environment.first}"]["akamai"]["ftp"]["password"],
+      :akamai_ftp_url          => node["update_llnw"]["#{environment.first}"]["akamai"]["ftp"]["url"],
+      :akamai_shortname        => node["update_llnw"]["#{environment.first}"]["akamai"]["shortname"],
+      :akamai_username         => node["update_llnw"]["#{environment.first}"]["akamai"]["username"],
+      :akamai_password         => node["update_llnw"]["#{environment.first}"]["akamai"]["password"],
+      :akamai_url              => node["update_llnw"]["#{environment.first}"]["akamai"]["url"],
+      :akamai_prepend_dir      => node["update_llnw"]["#{environment.first}"]["akamai"]["prepend_dir"],
+      :edgecast_ftp_username   => node["update_llnw"]["#{environment.first}"]["edgecast"]["ftp"]["username"],
+      :edgecast_ftp_password   => node["update_llnw"]["#{environment.first}"]["edgecast"]["ftp"]["password"],
+      :edgecast_ftp_url        => node["update_llnw"]["#{environment.first}"]["edgecast"]["ftp"]["url"],
+      :edgecast_shortname      => node["update_llnw"]["#{environment.first}"]["edgecast"]["shortname"],
+      :edgecast_username       => node["update_llnw"]["#{environment.first}"]["edgecast"]["username"],
+      :edgecast_password       => node["update_llnw"]["#{environment.first}"]["edgecast"]["password"],
+      :edgecast_url            => node["update_llnw"]["#{environment.first}"]["edgecast"]["url"],
+      :edgecast_prepend_dir    => node["update_llnw"]["#{environment.first}"]["edgecast"]["prepend_dir"]
      )
   end
 end
