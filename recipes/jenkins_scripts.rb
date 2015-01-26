@@ -40,6 +40,13 @@ template "/tmp/private_code/wrapssh4git.sh" do
   )
 end
 
+directory "/var/lib/jenkins/manifest" do
+  action :create
+  mode 0777
+  owner node[:jenkins][:server][:user]
+  group node[:jenkins][:server][:user]
+end
+
 ruby_block "update_scripts_owner" do
    block do
       FileUtils.chown_R 'jenkins', 'jenkins', '/var/lib/jenkins/server_scripts'
