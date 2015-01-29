@@ -28,33 +28,23 @@
    },
   "cdnInfo": {
     "limelight": {
-      "explorationRoot": "/mike/colinsulin",
-      "username_ftp": "",
-      "host": "",
-      "password_ftp": ""
-    },
-    "limelightnew": {
-      "shortname": "",
-      "explorationRoot": "content/mike/colinsulin",
-      "host": "",
-      "ftp_users": [
-        {
-          "username_ftp": "",
-          "password_ftp": ""
-        }
-      ]
+      "explorationRoot": "<%= @llnw_explorationRoot %>",
+      "username_ftp": "<%= @llnw_ftp_username %>",
+      "host": "<%= @llnw_ftp_host %>",
+      "password_ftp": "<%= @llnw_ftp_password %>"
+    }
     },
     "akamai": {
-      "explorationRoot": "/182210/mike/colinsulin",
-      "username_ftp": "",
-      "host": "",
-      "password_ftp": ""
+      "explorationRoot": "<%= @akami_explorationRoot %>",
+      "username_ftp": "<%= @akami_ftp_username %>",
+      "host": "<%= @akami_ftp_host %>",
+      "password_ftp": "<%= @akami_ftp_username %>"
     },
     "edgecast": {
-      "explorationRoot": "mike/colinsulin",
-      "username_ftp": "",
-      "host": "",
-      "password_ftp": ""
+      "explorationRoot": "<%= @edgecast_explorationRoot %>",
+      "username_ftp": "<%= @edgecast_ftp_username %>",
+      "host": "<%= @edgecast_ftp_host %>",
+      "password_ftp": "<%= @edgecast_ftp_password %>"
     }
   }
 }
