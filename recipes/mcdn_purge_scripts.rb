@@ -24,12 +24,12 @@ template "/var/lib/jenkins/server_scripts/jenkins/common/cdn_configs.json" do
   source "cdn_configs.json.erb"
   owner node[:jenkins][:server][:user]
   mode 0700
-  variables({
-     'purge_dir' => "#{node[:jenkins_configs][:wrapper:][:purge_dir]}",
-     'cdns_akamai' => "#{node[:jenkins_configs][:wrapper:][:cdns][:akamai]}",
-     'cdns_edgecast' => "#{node[:jenkins_configs][:wrapper:][:cdns][:edgecast]}",
-     'cdns_limelight' => "#{node[:jenkins_configs][:wrapper:][:cdns][:limelight]}",
-     'cdns_cdnetworks' => "#{node[:jenkins_configs][:wrapper:][:cdns][:cdnetworks]}",
+  variables(
+     'purge_dir' => "#{node[:jenkins_configs][:wrapper][:purge_dir]}",
+     'cdns_akamai' => "#{node[:jenkins_configs][:wrapper][:cdns][:akamai]}",
+     'cdns_edgecast' => "#{node[:jenkins_configs][:wrapper][:cdns][:edgecast]}",
+     'cdns_limelight' => "#{node[:jenkins_configs][:wrapper][:cdns][:limelight]}",
+     'cdns_cdnetworks' => "#{node[:jenkins_configs][:wrapper][:cdns][:cdnetworks]}",
      'akamai_user' => "#{node[:jenkins_configs][:akamai][:user]}",
      'akamai_pass' => "#{node[:jenkins_configs][:akamai][:pass]}",
      'edgecast_account_id' => "#{node[:jenkins_configs][:edgecast][:account_id]}",
@@ -42,7 +42,7 @@ template "/var/lib/jenkins/server_scripts/jenkins/common/cdn_configs.json" do
      'cdnetworks_user' => "#{node[:jenkins_configs][:cdnetworks][:user]}",
      'cdnetworks_pass' => "#{node[:jenkins_configs][:cdnetworks][:pass]}",
      'cdnetworks_mailTo' => "#{node[:jenkins_configs][:cdnetworks][:mailTo]}"
-  })
+  )
 end
 
 
