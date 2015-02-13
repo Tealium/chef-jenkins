@@ -25,23 +25,23 @@ template "/var/lib/jenkins/server_scripts/jenkins/common/cdn_configs.json" do
   owner node[:jenkins][:server][:user]
   mode 0700
   variables({
-     :purge_dir => node[:jenkins_configs][:wrapper:][:purge_dir],
-     :cdns_akamai => node[:jenkins_configs][:wrapper:][:cdns][:akamai],
-     :cdns_edgecast => node[:jenkins_configs][:wrapper:][:cdns][:edgecast],
-     :cdns_limelight => node[:jenkins_configs][:wrapper:][:cdns][:limelight],
-     :cdns_cdnetworks => node[:jenkins_configs][:wrapper:][:cdns][:cdnetworks],
-     :akamai_user => node[:jenkins_configs][:akamai][:user],
-     :akamai_pass => node[:jenkins_configs][:akamai][:pass],
-     :edgecast_account_id => node[:jenkins_configs][:edgecast][:account_id],
-     :edgecast_api_token => node[:jenkins_configs][:edgecast][:api_token],
-     :edgecast_media_base_uri => node[:jenkins_configs][:edgecast][:media_base_uri],
-     :limelight_emailTo => node[:jenkins_configs][:limelight][:emailTo],
-     :limelightemail_Type => node[:jenkins_configs][:limelight][:emailType],
-     :limelight_token => node[:jenkins_configs][:limelight][:token],
-     :limelight_user => node[:jenkins_configs][:limelight][:user],
-     :cdnetworks_user => node[:jenkins_configs][:cdnetworks][:user],
-     :cdnetworks_pass => node[:jenkins_configs][:cdnetworks][:pass],
-     :cdnetworks_mailTo => node[:jenkins_configs][:cdnetworks][:mailTo]
+     'purge_dir' => node[:jenkins_configs][:wrapper:][:purge_dir],
+     'cdns_akamai' => node[:jenkins_configs][:wrapper:][:cdns][:akamai],
+     'cdns_edgecast' => node[:jenkins_configs][:wrapper:][:cdns][:edgecast],
+     'cdns_limelight' => node[:jenkins_configs][:wrapper:][:cdns][:limelight],
+     'cdns_cdnetworks' => node[:jenkins_configs][:wrapper:][:cdns][:cdnetworks],
+     'akamai_user' => node[:jenkins_configs][:akamai][:user],
+     'akamai_pass' => node[:jenkins_configs][:akamai][:pass],
+     'edgecast_account_id' => node[:jenkins_configs][:edgecast][:account_id],
+     'edgecast_api_token' => node[:jenkins_configs][:edgecast][:api_token],
+     'edgecast_media_base_uri' => node[:jenkins_configs][:edgecast][:media_base_uri],
+     'limelight_emailTo' => node[:jenkins_configs][:limelight][:emailTo],
+     'limelightemail_Type' => node[:jenkins_configs][:limelight][:emailType],
+     'limelight_token' => node[:jenkins_configs][:limelight][:token],
+     'limelight_user' => node[:jenkins_configs][:limelight][:user],
+     'cdnetworks_user' => node[:jenkins_configs][:cdnetworks][:user],
+     'cdnetworks_pass' => node[:jenkins_configs][:cdnetworks][:pass],
+     'cdnetworks_mailTo' => node[:jenkins_configs][:cdnetworks][:mailTo]
   })
 end
 
