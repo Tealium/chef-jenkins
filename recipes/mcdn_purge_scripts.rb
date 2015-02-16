@@ -36,7 +36,7 @@ template "/var/lib/jenkins/server_scripts/jenkins/common/cdn_configs.json" do
      'edgecast_api_token' => "#{node[:jenkins][:edgecast][:api_token]}",
      'edgecast_media_base_uri' => "#{node[:jenkins][:edgecast][:media_base_uri]}",
      'limelight_emailTo' => "#{node[:jenkins][:limelight][:emailTo]}",
-     'limelightemail_Type' => "#{node[:jenkins][:limelight][:emailType]}",
+     'limelight_emailType' => "#{node[:jenkins][:limelight][:emailType]}",
      'limelight_token' => "#{node[:jenkins][:limelight][:token]}",
      'limelight_user' => "#{node[:jenkins][:limelight][:user]}",
      'cdnetworks_user' => "#{node[:jenkins][:cdnetworks][:user]}",
