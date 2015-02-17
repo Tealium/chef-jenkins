@@ -32,6 +32,8 @@ template "/var/lib/jenkins/server_scripts/jenkins/common/cdn_configs.json" do
      'cdns_cdnetworks' => "#{node[:jenkins][:wrapper][:cdns][:cdnetworks]}",
      'akamai_user' => "#{node[:jenkins][:akamai][:user]}",
      'akamai_pass' => "#{node[:jenkins][:akamai][:pass]}",
+     'akamai_arl' => "#{node[:jenkins][:akamai][:arl]}",
+     'akamai_domain' => "#{node[:jenkins][:akamai][:domain]}",
      'edgecast_account_id' => "#{node[:jenkins][:edgecast][:account_id]}",
      'edgecast_api_token' => "#{node[:jenkins][:edgecast][:api_token]}",
      'edgecast_media_base_uri' => "#{node[:jenkins][:edgecast][:media_base_uri]}",
