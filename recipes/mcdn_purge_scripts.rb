@@ -18,9 +18,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#all scripts go in the folder /var/lib/jenkins/server_scripts/jenkins/common
+directory "/etc/tealium/mcdn_purge" do
+  owner node[:jenkins][:server][:user]
+  group node[:jenkins][:server][:user]
+  mode '0755'
+  action :create
+end
 
-template "/var/lib/jenkins/server_scripts/jenkins/common/cdn_configs.json" do
+template "/etc/tealium/mcdn_purge/cdn_configs.json" do
   source "cdn_configs.json.erb"
   owner node[:jenkins][:server][:user]
   mode 0700
