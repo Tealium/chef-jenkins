@@ -34,7 +34,8 @@ directory "/etc/tealium/mcdn_purge" do
   action :create
 end
 
-template "/etc/tealium/mcdn_purge/cdn_configs.json" do
+node["update_llnw"].each do |environment|
+  template "/etc/tealium/mcdn_purge/#{environment.first}.json"  do
   source "cdn_configs.json.erb"
   owner node[:jenkins][:server][:user]
   mode 0700
