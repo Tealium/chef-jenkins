@@ -39,11 +39,11 @@ template "/etc/tealium/mcdn_purge/cdn_configs.json" do
   owner node[:jenkins][:server][:user]
   mode 0700
   variables(
-     'purge_dir' => "#{node[:jenkins][:wrapper][:purge_dir]}",
-     'cdns_akamai' => "#{node[:jenkins][:wrapper][:cdns][:akamai]}",
-     'cdns_edgecast' => "#{node[:jenkins][:wrapper][:cdns][:edgecast]}",
-     'cdns_limelight' => "#{node[:jenkins][:wrapper][:cdns][:limelight]}",
-     'cdns_cdnetworks' => "#{node[:jenkins][:wrapper][:cdns][:cdnetworks]}",
+     'purge_dir' => "#{node[:jenkins][:cdn_configs][:purge_dir]}",
+     'cdns_akamai' => "#{node[:jenkins][:cdn_configs][:cdns][:akamai]}",
+     'cdns_edgecast' => "#{node[:jenkins][:cdn_configs][:cdns][:edgecast]}",
+     'cdns_limelight' => "#{node[:jenkins][:cdn_configs][:cdns][:limelight]}",
+     'cdns_cdnetworks' => "#{node[:jenkins][:cdn_configs][:cdns][:cdnetworks]}",
      'akamai_user' => "#{node[:jenkins][:akamai][:user]}",
      'akamai_pass' => "#{node[:jenkins][:akamai][:pass]}",
      'akamai_arl' => "#{node[:jenkins][:akamai][:arl]}",
