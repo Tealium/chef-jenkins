@@ -34,13 +34,13 @@ directory "/etc/tealium/mcdn_purge" do
   action :create
 end
 
-node["update_llnw"].each do |environment|
+node[:jenkins][:mcdn_purge_dir].each do |environment|
   template "/etc/tealium/mcdn_purge/#{environment.first}.json"  do
   source "cdn_configs.json.erb"
   owner node[:jenkins][:server][:user]
   mode 0700
   variables(
-     'purge_dir' => "#{node[:jenkins][:cdn_configs][:purge_dir]}",
+     'purge_dir' => "#{node[:jenkins]["#{environment.first}"][:purge_dir]}",
      'cdns_akamai' => "#{node[:jenkins][:cdn_configs][:cdns][:akamai]}",
      'cdns_edgecast' => "#{node[:jenkins][:cdn_configs][:cdns][:edgecast]}",
      'cdns_limelight' => "#{node[:jenkins][:cdn_configs][:cdns][:limelight]}",
@@ -60,6 +60,6 @@ node["update_llnw"].each do |environment|
      'cdnetworks_pass' => "#{node[:jenkins][:cdnetworks][:pass]}",
      'cdnetworks_mailTo' => "#{node[:jenkins][:cdnetworks][:mailTo]}"
   )
+  end
 end
-
 
