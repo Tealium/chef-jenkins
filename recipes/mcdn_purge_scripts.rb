@@ -40,25 +40,25 @@ node[:jenkins][:mcdn_purge_dir].each do |environment|
   owner node[:jenkins][:server][:user]
   mode 0700
   variables(
-     'purge_dir' => "#{node[:jenkins]["#{environment.first}"][:purge_dir]}",
-     'cdns_akamai' => "#{node[:jenkins][:cdn_configs][:cdns][:akamai]}",
-     'cdns_edgecast' => "#{node[:jenkins][:cdn_configs][:cdns][:edgecast]}",
-     'cdns_limelight' => "#{node[:jenkins][:cdn_configs][:cdns][:limelight]}",
-     'cdns_cdnetworks' => "#{node[:jenkins][:cdn_configs][:cdns][:cdnetworks]}",
-     'akamai_user' => "#{node[:jenkins][:akamai][:user]}",
-     'akamai_pass' => "#{node[:jenkins][:akamai][:pass]}",
-     'akamai_arl' => "#{node[:jenkins][:akamai][:arl]}",
-     'akamai_domain' => "#{node[:jenkins][:akamai][:domain]}",
-     'edgecast_account_id' => "#{node[:jenkins][:edgecast][:account_id]}",
-     'edgecast_api_token' => "#{node[:jenkins][:edgecast][:api_token]}",
-     'edgecast_media_base_uri' => "#{node[:jenkins][:edgecast][:media_base_uri]}",
-     'limelight_emailTo' => "#{node[:jenkins][:limelight][:emailTo]}",
-     'limelight_emailType' => "#{node[:jenkins][:limelight][:emailType]}",
-     'limelight_token' => "#{node[:jenkins][:limelight][:token]}",
-     'limelight_user' => "#{node[:jenkins][:limelight][:user]}",
-     'cdnetworks_user' => "#{node[:jenkins][:cdnetworks][:user]}",
-     'cdnetworks_pass' => "#{node[:jenkins][:cdnetworks][:pass]}",
-     'cdnetworks_mailTo' => "#{node[:jenkins][:cdnetworks][:mailTo]}"
+     'purge_dir' => node[:jenkins]["#{environment.first}"][:purge_dir],
+     'cdns_akamai' => node[:jenkins][:cdn_configs][:cdns][:akamai],
+     'cdns_edgecast' => node[:jenkins][:cdn_configs][:cdns][:edgecast],
+     'cdns_limelight' => node[:jenkins][:cdn_configs][:cdns][:limelight],
+     'cdns_cdnetworks' => node[:jenkins][:cdn_configs][:cdns][:cdnetworks],
+     'akamai_user' => node[:jenkins][:akamai][:user],
+     'akamai_pass' => node[:jenkins][:akamai][:pass],
+     'akamai_arl' => node[:jenkins][:akamai][:arl],
+     'akamai_domain' => node[:jenkins][:akamai][:domain],
+     'edgecast_account_id' => node[:jenkins][:edgecast][:account_id],
+     'edgecast_api_token' => node[:jenkins][:edgecast][:api_token],
+     'edgecast_media_base_uri' => node[:jenkins][:edgecast][:media_base_uri],
+     'limelight_emailTo' => node[:jenkins][:limelight][:emailTo],
+     'limelight_emailType' => node[:jenkins][:limelight][:emailType],
+     'limelight_token' => node[:jenkins][:limelight][:token],
+     'limelight_user' => node[:jenkins][:limelight][:user],
+     'cdnetworks_user' => node[:jenkins][:cdnetworks][:user],
+     'cdnetworks_pass' => node[:jenkins][:cdnetworks][:pass],
+     'cdnetworks_mailTo' => node[:jenkins][:cdnetworks][:mailTo]
   )
   end
 end
