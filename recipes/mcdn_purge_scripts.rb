@@ -18,14 +18,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 %w(
-akamai_api
-edgecast_api
+  libxml2
+  libxml2-dev
+  libxml2-utils
 ).each do |pak|
-    gem_package pak do 
+    package pak do 
        action :install 
     end
-end
+  end
+
+
+    gem_package "nokogiri" do 
+       version "1.6.2.1"
+       options ("-- --use-system-libraries --with-xml2-include=/usr/share/libxml2")
+       action :install 
+    end
+
+#%w(
+#akamai_api
+#edgecast_api
+#).each do |pak|
+#    gem_package pak do 
+#       action :install 
+#    end
+#end
 
 directory "/etc/tealium/mcdn_purge" do
   owner node[:jenkins][:server][:user]
@@ -34,13 +52,15 @@ directory "/etc/tealium/mcdn_purge" do
   action :create
 end
 
+#Need to set if it's not found or vagrant set to DONOTUSE
+
 node[:jenkins][:mcdn_purge_dir].each do |environment|
-  template "/etc/tealium/mcdn_purge/#{environment.first}.json"  do
+  template "/etc/tealium/mcdn_purge/#{environment.first}_cdn_configs.json"  do
   source "cdn_configs.json.erb"
   owner node[:jenkins][:server][:user]
   mode 0700
   variables(
-     'purge_dir' => node[:jenkins]["#{environment.first}"][:purge_dir],
+     'purge_dir' => node[:jenkins][:mcdn_purge_dir]["#{environment.first}"][:purge_dir],
      'cdns_akamai' => node[:jenkins][:cdn_configs][:cdns][:akamai],
      'cdns_edgecast' => node[:jenkins][:cdn_configs][:cdns][:edgecast],
      'cdns_limelight' => node[:jenkins][:cdn_configs][:cdns][:limelight],
