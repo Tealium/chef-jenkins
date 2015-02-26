@@ -23,6 +23,8 @@
   libxml2
   libxml2-dev
   libxml2-utils
+  libxslt1-dev
+  libxslt1.1 
 ).each do |pak|
     package pak do 
        action :install 
@@ -30,20 +32,19 @@
   end
 
 
-    gem_package "nokogiri" do 
-       version "1.6.2.1"
-       options ("-- --use-system-libraries --with-xml2-include=/usr/share/libxml2")
+gem_package "nokogiri" do 
+  options ("-- --use-system-libraries --with-xml2-include=/usr/include/libxml2/")
+  action :install 
+end
+
+%w(
+akamai_api
+edgecast_api
+).each do |pak|
+    gem_package pak do 
        action :install 
     end
-
-#%w(
-#akamai_api
-#edgecast_api
-#).each do |pak|
-#    gem_package pak do 
-#       action :install 
-#    end
-#end
+end
 
 directory "/etc/tealium/mcdn_purge" do
   owner node[:jenkins][:server][:user]
