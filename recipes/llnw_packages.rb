@@ -47,7 +47,6 @@ include_recipe "perl"
   make
   libconfig-json-perl
   libdigest-perl
-  libright-aws-ruby 
   libfile-slurp-perl
   build-essential
 ).each do |pak|
@@ -56,11 +55,11 @@ include_recipe "perl"
     end
 end
 
-%w(
-   Net::LimeLight::Purge
-).each do |package| 
-   cpan_module package
-end
+#%w(
+#   Net::LimeLight::Purge
+#).each do |package| 
+#   cpan_module package
+#end
 
 directory "/etc/tealium" do 
    recursive true
