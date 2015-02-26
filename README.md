@@ -117,6 +117,12 @@ Uses the nginx::source recipe from the nginx cookbook to install an HTTP fronten
 
 Uses the apache2 recipe from the apache2 cookbook to install an HTTP frontend proxy. To automatically activate this recipe set the `node[:jenkins][:http_proxy][:variant]` to `apache2`.
 
+'maven_nexus_config' recipe
+---------------------------
+
+For deploying the maven settings for use with jenkins jobs that deploy to and pull from nexus
+/usr/local/maven/conf/settings.xml file n stuff
+
 'jenkins_cli' resource provider
 -------------------------------
 
@@ -183,6 +189,22 @@ Issues
 
 License & Author
 ================
+
+This is a total Franken-cookbook - forked from upstream, pieces stitched onto it (recipies added) by a secret process (i.e. not described here).  You have to go look in recipies to see what they all do, sorry :(
+
+                 .-""-"-""-.
+                /           \
+                | .--.-.--. |
+                |` >       `|
+                | <         |
+                (__..---..__)
+               (`|\o_/ \_o/|`)
+                \(    >    )/
+              [>=|   ---   |=<]
+                 \__\   /__/
+                     '-'
+
+Basically a beached fork of the following:
 
 This is a downstream fork of Doug MacEachern's Hudson cookbook (https://github.com/dougm/site-cookbooks) and therefore deserves all the glory.
 

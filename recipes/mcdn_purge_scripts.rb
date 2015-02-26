@@ -18,15 +18,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-%w(
-akamai_api
-edgecast_api
-).each do |pak|
-    gem_package pak do 
-       action :install 
-    end
-end
-
 directory "/etc/tealium/mcdn_purge" do
   owner node[:jenkins][:server][:user]
   group node[:jenkins][:server][:user]
