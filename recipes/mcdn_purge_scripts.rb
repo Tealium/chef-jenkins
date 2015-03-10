@@ -24,13 +24,28 @@
   libxml2-dev
   libxml2-utils
   libxslt1-dev
-  libxslt1.1 
+  libxslt1.1
+  zlib1g-dev
 ).each do |pak|
     package pak do 
        action :install 
     end
   end
 
+
+# Add ppa to make version 1.7+ of Subversion available
+execute "add-apt-repository" do
+  command "add-apt-repository ppa:brightbox/ruby-ng-experimental"
+end
+
+# apt-get update to bring in the ppa contents
+execute "apt-get update" do
+  command "sudo apt-get update"
+end
+
+package "ruby2.2" 
+
+package "ruby2.2-dev"
 
 gem_package "nokogiri" do 
   options ("-- --use-system-libraries --with-xml2-include=/usr/include/libxml2/")
