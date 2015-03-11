@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: utui
-# Recipe:: utui_data_craon
+# Cookbook Name:: chef-jenkins
+# Recipe:: utui_data_cron
 #
-# Copyright 2012, Tealium Inc.
+# Copyright 2015, Tealium Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,61 +18,60 @@
 #
 require "json"
 
+log_header = '[chef-jenkins::utui_data_cron] '
+
+hour_counter = 1
+# pull authoratative data in
 cron "update_data_daily" do 
-	minute "0"
-	hour "1"
-	user "jenkins"
-  command "rsync -avz --exclude .git -e 'ssh -i /var/run/tealium/chef/chef-deployment' ubuntu@54.215.1.2:/data/utui/data/accounts/ /data/accounts"
+  minute "0"
+  hour hour_counter
+  user "jenkins"
+  command "rsync -avz --exclude .git -e 'ssh -i #{node[:jenkins][:production_utui_rsync_user_key]}' #{node[:jenkins][:production_utui_rsync_user]}@#{node[:jenkins][:production_utui_eip]}:/data/utui/data/accounts/ /data/accounts"
   action node['disable_data_update'] ? :delete : :create
 end
 
-cron "update_data_daily_qa01" do 
-	minute "0"
-	hour "2"
-	user "jenkins"
-  command "rsync -avz --exclude .git --exclude '/lost+found' -x -p -e 'ssh -i /var/run/tealium/chef/.chef/qa.pem' /data/accounts/ ubuntu@54.193.93.107:/data/utui/data/accounts"
-  action node['disable_data_update'] ? :delete : :create
+
+
+server_ip_list = []
+
+if node.chef_environment =~ /production/
+    envString = '*production*'
+else
+    envString = node.chef_environment
 end
 
-cron "update_data_daily_qa05" do 
-	minute "30"
-	hour "2"
-	user "jenkins"
-	command "rsync -avz --exclude .git --exclude '/lost+found' -x -p -e 'ssh -i /var/run/tealium/chef/.chef/qa.pem' /data/accounts/ ubuntu@54.193.46.110:/data/utui/data/accounts"
-  action node['disable_data_update'] ? :delete : :create
+search_string = 'role:jenkins_slave AND jenkins_cron_utui_account_rsync:true'
+Chef::Log.warn("#{log_header}Search string to find jenkins slave hosts to rsync to is: [#{search_string}]")
+
+if Chef::Config[:solo]
+    Chef::Log.warn("#{log_header}This recipe uses search to find the Jenkins slave hosts to rsync account data to.  Chef solo does not support search so you will get the default attributes.  Set them in your node's profile settings if you are Vagranting your way to glory.")
+    # jenkins_slaves_manually_specified should be an array of hashes of { 'ec2': { 'public_ipv4': '<IPADDR>' }, 'environment': '<ENV_NAME>' }
+    jenkins_slave_hosts = node[:jenkins_slaves_manually_specified]
+else
+    jenkins_slave_hosts = search(:node, search_string)
+    Chef::Log.warn("#{log_header}I got this result set back from search #{jenkins_slave_hosts}")
+    if jenkins_slave_hosts.nil? || jenkins_slave_hosts.empty? then
+        Chef::Log.error("#{log_header}Didn't find any hosts with search string #{search_string} won't create any rsync cron tasks to sync out data to jenkins slave hosts")
+    else
+        hour_incrementor = 1
+        half_hour_or_nah = 0
+        jenkins_slave_hosts.each_with_index do |server, index|
+
+            Chef::Log.warn("#{log_header}Currently processing cron job for server: #{server['fqdn']} with environment: #{server.chef_environment}")
+            # rsync out to each Jenkins slave in a VPC
+            if ( index % 2 == 0 )
+                half_hour_or_nah = 30
+            else
+                half_hour_or_nah = 0
+                hour_counter += 1
+            end
+            cron "update_data_daily_#{server.chef_environment}" do
+            minute half_hour_or_nah
+            hour hour_counter
+            user "jenkins"
+            command "rsync -avz --exclude .git --exclude '/lost+found' -x -p -e 'ssh -i #{node[:jenkins][:nonprod_utui_rsync_user_key]}' /data/accounts/ #{node[:jenkins][:nonprod_utui_rysnc_user]}@#{server['ec2']['public_ipv4']}:/data/utui/data/accounts"
+            action node['disable_data_update'] ? :delete : :create
+            end
+        end
+    end
 end
-
-cron "update_data_daily_qa06" do 
-	minute "0"
-	hour "3"
-	user "jenkins"
-  command "rsync -avz --exclude .git --exclude '/lost+found' -x -p -e 'ssh -i /var/run/tealium/chef/.chef/qa.pem' /data/accounts/ ubuntu@54.215.238.250:/data/utui/data/accounts"
-  action node['disable_data_update'] ? :delete : :create
-end
-
-cron "update_data_daily_qa07" do 
-	minute "30"
-	hour "3"
-	user "jenkins"
-	command "rsync -avz --exclude .git --exclude '/lost+found' -x -p -e 'ssh -i /var/run/tealium/chef/.chef/qa.pem' /data/accounts/ ubuntu@54.219.129.156:/data/utui/data/accounts"
-  action node['disable_data_update'] ? :delete : :create
-end
-
-cron "update_data_daily_qa08" do 
-	minute "0"
-	hour "4"
-	user "jenkins"
-	command "rsync -avz --exclude .git --exclude '/lost+found' -x -p -e 'ssh -i /var/run/tealium/chef/.chef/qa.pem' /data/accounts/ ubuntu@54.193.122.123:/data/utui/data/accounts"
-  action node['disable_data_update'] ? :delete : :create
-end
-
-#Not going to use this for now
-#template "/data/exclude.txt" do
-#	source "exclude.txt.erb"
-#	mode 755
-#	jenkins_data = search(:jenkins_data, "id:utui_data").first
-#  variables(
-#    :exclude => jenkins_data["exclude"].nil? ? "{}" : jenkins_data["exclude"]
-#	)
-#end
-
