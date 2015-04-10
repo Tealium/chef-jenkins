@@ -1,3 +1,4 @@
+name        "chef-jenkins"
  maintainer       "AJ Christensen"
 maintainer_email "aj@junglist.gen.nz"
 license          "Apache 2.0"
