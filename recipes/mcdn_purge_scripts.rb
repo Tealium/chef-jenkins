@@ -70,17 +70,17 @@ end
 
 #Need to set if it's not found or vagrant set to DONOTUSE
 
-node[:jenkins][:mcdn_purge_dir].each do |environment|
+node[:jenkins][:mcdn_purge].each do |environment|
   template "/etc/tealium/mcdn_purge/#{environment.first}_cdn_configs.json"  do
   source "cdn_configs.json.erb"
   owner node[:jenkins][:server][:user]
   mode 0700
   variables(
-     'purge_dir' => node[:jenkins][:mcdn_purge_dir]["#{environment.first}"][:purge_dir],
-     'cdns_akamai' => node[:jenkins][:cdn_configs][:cdns][:akamai],
-     'cdns_edgecast' => node[:jenkins][:cdn_configs][:cdns][:edgecast],
-     'cdns_limelight' => node[:jenkins][:cdn_configs][:cdns][:limelight],
-     'cdns_cdnetworks' => node[:jenkins][:cdn_configs][:cdns][:cdnetworks],
+     'purge_dir' => node[:jenkins][:mcdn_purge]["#{environment.first}"][:purge_dir],
+     'enable_cdns_akamai' => node[:jenkins][:mcdn_purge]["#{environment.first}"][:cdns][:akamai],
+     'enable_cdns_edgecast' => node[:jenkins][:mcdn_purge]["#{environment.first}"][:cdns][:edgecast],
+     'enable_cdns_limelight' => node[:jenkins][:mcdn_purge]["#{environment.first}"][:cdns][:limelight],
+     'enable_cdns_cdnetworks' => node[:jenkins][:mcdn_purge]["#{environment.first}"][:cdns][:cdnetworks],
      'akamai_user' => node[:jenkins][:akamai][:user],
      'akamai_pass' => node[:jenkins][:akamai][:pass],
      'akamai_arl' => node[:jenkins][:akamai][:arl],
