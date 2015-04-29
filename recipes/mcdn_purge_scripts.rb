@@ -55,7 +55,6 @@ end
 %w(
 akamai_api
 edgecast_api
-hmac-sha2
 ruby-hmac
 openssl
 ).each do |pak|
