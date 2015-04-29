@@ -56,7 +56,6 @@ end
 akamai_api
 edgecast_api
 ruby-hmac
-openssl
 ).each do |pak|
     gem_package pak do 
        action :install 
