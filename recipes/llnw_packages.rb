@@ -111,15 +111,7 @@ node["update_llnw"].each do |environment|
       :edgecast_username       => node["update_llnw"]["#{environment.first}"]["edgecast"]["username"],
       :edgecast_password       => node["update_llnw"]["#{environment.first}"]["edgecast"]["password"],
       :edgecast_url            => node["update_llnw"]["#{environment.first}"]["edgecast"]["url"],
-      :edgecast_prepend_dir    => node["update_llnw"]["#{environment.first}"]["edgecast"]["prepend_dir"],
-      #:cdnetworks_ftp_username   => node["update_llnw"]["#{environment.first}"]["cdnetworks"]["ftp"]["username"],
-      #:cdnetworks_ftp_password   => node["update_llnw"]["#{environment.first}"]["cdnetworks"]["ftp"]["password"],
-      #:cdnetworks_ftp_url        => node["update_llnw"]["#{environment.first}"]["cdnetworks"]["ftp"]["url"],
-      #:cdnetworks_shortname      => node["update_llnw"]["#{environment.first}"]["cdnetworks"]["shortname"],
-      #:cdnetworks_username       => node["update_llnw"]["#{environment.first}"]["cdnetworks"]["username"],
-      #:cdnetworks_password       => node["update_llnw"]["#{environment.first}"]["cdnetworks"]["password"],
-      #:cdnetworks_url            => node["update_llnw"]["#{environment.first}"]["cdnetworks"]["url"],
-      #:cdnetworks_prepend_dir    => node["update_llnw"]["#{environment.first}"]["cdnetworks"]["prepend_dir"]
+      :edgecast_prepend_dir    => node["update_llnw"]["#{environment.first}"]["edgecast"]["prepend_dir"]
      )
   end
 end
