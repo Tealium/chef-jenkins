@@ -32,7 +32,7 @@ default[:jenkins][:jently] = "/var/lib/Jently"
 
 case node[:platform]
 when "debian", "ubuntu"
-  default[:jenkins][:server][:group] = "admin"
+  default[:jenkins][:server][:group] = "jenkins"
 else
   default[:jenkins][:server][:group] = node[:jenkins][:server][:user]
 end
