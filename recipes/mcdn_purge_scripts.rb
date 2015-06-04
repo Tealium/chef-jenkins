@@ -81,7 +81,6 @@ node[:jenkins][:mcdn_purge].each do |environment|
      'enable_cdns_akamai' => node[:jenkins][:mcdn_purge]["#{environment.first}"][:cdns][:akamai],
      'enable_cdns_edgecast' => node[:jenkins][:mcdn_purge]["#{environment.first}"][:cdns][:edgecast],
      'enable_cdns_limelight' => node[:jenkins][:mcdn_purge]["#{environment.first}"][:cdns][:limelight],
-     'enable_cdns_cdnetworks' => node[:jenkins][:mcdn_purge]["#{environment.first}"][:cdns][:cdnetworks],
      'akamai_user' => node[:jenkins][:akamai][:user],
      'akamai_pass' => node[:jenkins][:akamai][:pass],
      'akamai_arl' => node[:jenkins][:akamai][:arl],
@@ -92,10 +91,7 @@ node[:jenkins][:mcdn_purge].each do |environment|
      'limelight_emailTo' => node[:jenkins][:limelight][:emailTo],
      'limelight_emailType' => node[:jenkins][:limelight][:emailType],
      'limelight_token' => node[:jenkins][:limelight][:token],
-     'limelight_user' => node[:jenkins][:limelight][:user],
-     'cdnetworks_user' => node[:jenkins][:cdnetworks][:user],
-     'cdnetworks_pass' => node[:jenkins][:cdnetworks][:pass],
-     'cdnetworks_mailTo' => node[:jenkins][:cdnetworks][:mailTo]
+     'limelight_user' => node[:jenkins][:limelight][:user]
   )
   end
 end
