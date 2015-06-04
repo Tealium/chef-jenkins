@@ -24,6 +24,9 @@
 
 tmp = "/tmp"
 
+group node[:jenkins][:server][:group] do
+end
+
 user node[:jenkins][:server][:user] do
   home node[:jenkins][:server][:home]
 end
