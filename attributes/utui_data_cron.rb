@@ -4,4 +4,4 @@ default[:jenkins][:production_utui_rsync_user] = 'genericUsername'
 default[:jenkins][:production_utui_rsync_user_key] = '/this/path/to/keyfile'
 
 default[:jenkins][:nonprod_utui_rysnc_user] = 'otherGenericUsername'
-default[:jenkins][:nonprod_utui_rsync_user_key] = '/this/possible/different/other/path/to/keyfile'
+default[:jenkins][:nonprod_utui_rsync_user_key] = '/this/possibly/different/other/path/to/keyfile'
