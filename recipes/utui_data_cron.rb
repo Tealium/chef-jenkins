@@ -48,7 +48,7 @@ else
     envString = node.chef_environment
 end
 
-search_string = 'chef_environment: qa* AND role:jenkins_slave AND jenkins_cron_utui_account_rsync:true'
+search_string = 'chef_environment:qa* AND role:jenkins_slave AND jenkins_cron_utui_account_rsync:true'
 Chef::Log.warn("#{log_header}Search string to find jenkins slave hosts to rsync to is: [#{search_string}]")
 
 if Chef::Config[:solo]
