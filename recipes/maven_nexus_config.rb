@@ -21,9 +21,9 @@ mavNexConf = node[:jenkins]
 
 template '/usr/local/maven/conf/settings.xml' do
   source 'local_maven_conf_settings.xml.erb'
-  mode '0640'
-  owner root
-  group root
+  mode '0755'
+  owner 'root'
+  group 'root'
   variables(
       'serverId' => mavNexConf[:nexus_server_id],
       'userName' => mavNexConf[:nexus_user_id],
