@@ -30,15 +30,16 @@ node["urest_config"].each do |config|
      Chef::Log.info("This is what the config is #{config.first}")
 
      variables(
-      :urest_host      		=> node["urest_config"]["#{config.first}"]["urest_host"],
-      :urest_port     		=> node["urest_config"]["#{config.first}"]["urest_port"],
-      :urest_users_path     => node["urest_config"]["#{config.first}"]["urest_users_path"],
-      :urest_legacy_path    => node["urest_config"]["#{config.first}"]["urest_legacy_path"],
-      :utag_host    => node["urest_config"]["#{config.first}"]["utag_host"],
-      :utag_path    => node["urest_config"]["#{config.first}"]["utag_path"],
-      :recurly_subdomain => node["urest_config"]["#{config.first}"]["recurly_subdomain"],
-      :bloomfire_host => node["urest_config"]["#{config.first}"]["bloomfire_host"],
-      :tealium_tools_package => node["urest_config"]["#{config.first}"]["tealium_tools_package"]
+      :urest_host      		    => node["urest_config"]["#{config.first}"]["urest_host"],
+      :urest_port     		    => node["urest_config"]["#{config.first}"]["urest_port"],
+      :urest_users_path       => node["urest_config"]["#{config.first}"]["urest_users_path"],
+      :urest_legacy_path      => node["urest_config"]["#{config.first}"]["urest_legacy_path"],
+      :utag_host              => node["urest_config"]["#{config.first}"]["utag_host"],
+      :utag_path              => node["urest_config"]["#{config.first}"]["utag_path"],
+      :recurly_subdomain      => node["urest_config"]["#{config.first}"]["recurly_subdomain"],
+      :bloomfire_host         => node["urest_config"]["#{config.first}"]["bloomfire_host"],
+      :tealium_tools_package  => node["urest_config"]["#{config.first}"]["tealium_tools_package"],
+      :community_host         => node["urest_config"]["#{config.first}"]['community_host']
      )
   end
 end

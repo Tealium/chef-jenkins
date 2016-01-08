@@ -28,6 +28,14 @@ directory '/data/accounts' do
   action :create
 end
 
+template '/etc/tealium/rsync_include_exclude_list.txt' do
+  source 'rsync_include_exclude_list.txt.erb'
+  mode '0755'
+  owner node[:jenkins][:server][:user]
+  group node[:jenkins][:server][:user]
+  action :create
+end
+
 hour_counter = 1
 # pull authoratative data in
 cron "update_data_daily" do 
@@ -88,7 +96,7 @@ else
             minute half_hour_or_nah
             hour hour_counter
             user node[:jenkins][:server][:user]
-            command "rsync -avz --exclude .git --exclude '/lost+found' -x -p -e 'ssh -i #{node[:jenkins][:nonprod_utui_rsync_user_key]}' /data/accounts/ #{node[:jenkins][:nonprod_utui_rysnc_user]}@#{server['ec2']['public_ipv4']}:/data/utui/data/accounts"
+            command "rsync -avz --include-from '/etc/tealium/rsync_include_exclude_list.txt' --exclude '*' -x -p -e 'ssh -i #{node[:jenkins][:nonprod_utui_rsync_user_key]}' /data/accounts/ #{node[:jenkins][:nonprod_utui_rysnc_user]}@#{server['ec2']['public_ipv4']}:/data/utui/data/accounts"
             action node['disable_data_update'] ? :delete : :create
             end
         end
