@@ -39,7 +39,8 @@ node["urest_config"].each do |config|
       :recurly_subdomain      => node["urest_config"]["#{config.first}"]["recurly_subdomain"],
       :bloomfire_host         => node["urest_config"]["#{config.first}"]["bloomfire_host"],
       :tealium_tools_package  => node["urest_config"]["#{config.first}"]["tealium_tools_package"],
-      :community_host         => node["urest_config"]["#{config.first}"]['community_host']
+      :community_host         => node["urest_config"]["#{config.first}"]['community_host'],
+      :as_maintenance         => node["urest_config"]["#{config.first}"]['as_maintenance']
      )
   end
 end
