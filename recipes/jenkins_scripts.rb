@@ -2,9 +2,9 @@
 # Cookbook Name:: jenkins
 # Recipe:: jenkins_scripts
 #
-# Author:: Jennifer Mitchell
+# Author:: Tealium Devops
 #
-# Copyright 2012.
+# Copyright 2016.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ template "/tmp/private_code/wrapssh4git.sh" do
   mode 0700
   variables(
     'home_dir' => '/tmp/private_code',
-    'ssh_key'  => "#{node[:jenkins][:server][:home]}/.ssh/id_rsa"
+    'ssh_key'  => "#{node[:jenkins][:server][:home]}/.ssh/new_id_rsa"
   )
 end
 
@@ -55,14 +55,14 @@ ruby_block "update_scripts_owner" do
 end
 
 git '/var/lib/jenkins/server_scripts' do
-      
+
       Chef::Log.info("Checking out the Server Scripts Repo")
       repository node[:scripts_repo]["repo"]
       user node[:jenkins][:server][:user]
       group node[:jenkins][:server][:group]
       revision node[:scripts_repo]["revision"]
       ssh_wrapper "/tmp/private_code/wrapssh4git.sh"
-      # This flag should be set to true if you want chef to 
+      # This flag should be set to true if you want chef to
       # sync the git repo to the latest version each time that it runs.
       action node[:scripts_repo]["git_sync"] ? :sync : :checkout
       notifies :create, "ruby_block[update_scripts_owner]", :immediately
