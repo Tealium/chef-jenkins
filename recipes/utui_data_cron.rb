@@ -47,7 +47,10 @@ cron "update_data_daily" do
 end
 
 app_environment = node["app_environment"] || "development"
-rsync_file = data_bag_item('rsync_utui_data', app_environment)
+rsync_accounts = data_bag_item('rsync_utui_data', app_environment)
+
+rsync_accounts_include = rsync_accounts['include'].join("\n")
+rsync_accounts_exclude = rsync_accounts['exclude'].join("\n")
 
 template '/etc/tealium/rsync_include_exclude_list.txt' do
    source "rsync_include_exclude_list.txt.erb"
@@ -55,7 +58,8 @@ template '/etc/tealium/rsync_include_exclude_list.txt' do
    group node[:jenkins][:server][:group]
    mode '0775'
    variables(
-    :account_list => rsync_file[:account_list]
+    :include_list => rsync_accounts_include,
+    :exclude_list => rsync_accounts_exclude
     )
 end
 
