@@ -52,8 +52,8 @@ Chef::Log.warn "APP_ENV==== #{app_environment}"
 
 rsync_accounts = data_bag_item('rsync_utui_data', app_environment)
 
-rsync_accounts_include = rsync_accounts['include']
-rsync_accounts_exclude = rsync_accounts['exclude']
+rsync_accounts_include = rsync_accounts['include'].join("\n")
+rsync_accounts_exclude = rsync_accounts['exclude'].join("\n")
 
 template '/etc/tealium/rsync_include_exclude_list.txt' do
    source "rsync_include_exclude_list.txt.erb"
