@@ -47,7 +47,6 @@ cron "update_data_daily" do
 end
 
 app_environment = node["app_environment"] || "development"
-
 rsync_accounts = data_bag_item('rsync_utui_data', app_environment)
 
 rsync_accounts_include = rsync_accounts['include'].join("\n")
