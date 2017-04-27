@@ -28,17 +28,9 @@ directory '/data/accounts' do
   action :create
 end
 
-template '/etc/tealium/rsync_include_exclude_list.txt' do
-  source 'rsync_include_exclude_list.txt.erb'
-  mode '0755'
-  owner node[:jenkins][:server][:user]
-  group node[:jenkins][:server][:user]
-  action :create
-end
-
 hour_counter = 1
 # pull authoratative data in
-cron "update_data_daily" do 
+cron "update_data_daily" do
   minute "0"
   hour hour_counter
   user node[:jenkins][:server][:user]
