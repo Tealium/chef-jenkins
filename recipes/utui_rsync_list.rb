@@ -17,10 +17,19 @@
 # limitations under the License.
 #
 
+app_environment = node["app_environment"] || "development"
+rsync_accounts = data_bag_item('rsync_utui_data', app_environment)
+
+rsync_accounts_include = rsync_accounts['include'].join("\n")
+rsync_accounts_exclude = rsync_accounts['exclude'].join("\n")
+
 template '/etc/tealium/rsync_include_exclude_list.txt' do
   source 'rsync_include_exclude_list.txt.erb'
-  mode '0755'
+  mode '0775'
   owner node[:jenkins][:server][:user]
-  group node[:jenkins][:server][:user]
-  action :create
+  group node[:jenkins][:server][:group]
+  variables(
+    :include_list => rsync_accounts_include,
+    :exclude_list => rsync_accounts_exclude
+  )
 end

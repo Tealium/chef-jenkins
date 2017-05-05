@@ -38,23 +38,6 @@ cron "update_data_daily" do
   action node['disable_data_update'] ? :delete : :create
 end
 
-app_environment = node["app_environment"] || "development"
-rsync_accounts = data_bag_item('rsync_utui_data', app_environment)
-
-rsync_accounts_include = rsync_accounts['include'].join("\n")
-rsync_accounts_exclude = rsync_accounts['exclude'].join("\n")
-
-template '/etc/tealium/rsync_include_exclude_list.txt' do
-   source "rsync_include_exclude_list.txt.erb"
-   owner node[:jenkins][:server][:user]
-   group node[:jenkins][:server][:group]
-   mode '0775'
-   variables(
-    :include_list => rsync_accounts_include,
-    :exclude_list => rsync_accounts_exclude
-    )
-end
-
 server_ip_list = []
 
 if node.chef_environment =~ /production/
