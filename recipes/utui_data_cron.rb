@@ -34,7 +34,7 @@ cron "update_data_daily" do
   minute "0"
   hour hour_counter
   user node[:jenkins][:server][:user]
-  command "rsync -avz --exclude .git -e 'ssh -i #{node[:jenkins][:production_utui_rsync_user_key]}' #{node[:jenkins][:production_utui_rsync_user]}@#{node[:jenkins][:production_utui_eip]}:/data/utui/data/accounts/ /data/accounts"
+  command "rsync -avz --include-from '/etc/tealium/rsync_include_exclude_list.txt' --exclude '*' -e 'ssh -i #{node[:jenkins][:production_utui_rsync_user_key]}' #{node[:jenkins][:production_utui_rsync_user]}@#{node[:jenkins][:production_utui_eip]}:/data/utui/data/accounts/ /data/accounts"
   action node['disable_data_update'] ? :delete : :create
 end
 
