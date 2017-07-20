@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-return if node["app_environment"] =~ /production|pc\d+|/
+return if node["app_environment"]  =~ /^(production|pc\d+)$/
 
 app_environment = node["app_environment"] || "development"
 rsync_accounts = data_bag_item('rsync_utui_data', app_environment)
