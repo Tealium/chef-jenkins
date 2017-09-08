@@ -1,30 +1,28 @@
 {
-  "cdn_configs"     : {
-                    "purge_dir" : "<%= @purge_dir %>"
-                    ,"cdns" : {
-                                "akamai"     : <%= @enable_cdns_akamai %>
-                               ,"edgecast"   : <%= @enable_cdns_edgecast %>
-                               ,"limelight"  : <%= @enable_cdns_limelight %>
-                               ,"cdnetworks" : <%= @enable_cdns_cdnetworks %>
-                              }
-                  }
-  ,"akamai"     : {
-                     "user"   : "<%= @akamai_user %>"
-                    ,"pass"   : "<%= @akamai_pass %>" 
-                    ,"arl"    : "<%= @akamai_arl %>" 
-                    ,"domain" : "<%= @akamai_domain %>" 
-                  }
-  ,"edgecast"   : {
-                     "account_id"     : "<%= @edgecast_account_id %>"
-                    ,"api_token"      : "<%= @edgecast_api_token %>"
-                    ,"media_base_uri" : "<%= @edgecast_media_base_uri %>" 
-                  }
-  ,"limelight"  : {
-                     "emailTo"   : "<%= @limelight_emailTo %>"
-                    ,"emailType" : "<%= @limelight_emailType %>"
-                    ,"apiUrl"    : "http://control.llnw.com/purge-api/v1/"
-                    ,"apiKey"    : "<%= @limelight_token %>"
-                    ,"apiUser"   : "<%= @limelight_user %>" 
-                  }
+  "cdn_configs": {
+    "purge_dir": "<%= @purge_dir %>",
+    "cdns": {
+      "akamai": <%= @enable_cdns_akamai %>,
+      "edgecast": <%= @enable_cdns_edgecast %>,
+      "limelight": <%= @enable_cdns_limelight %>
+    }
+  },
+  "akamai": {
+    "user": "<%= @akamai_user %>",
+    "pass": "<%= @akamai_pass %>",
+    "arl": "<%= @akamai_arl %>",
+    "domain": "<%= @akamai_domain %>"
+  },
+  "edgecast": {
+    "account_id": "<%= @edgecast_account_id %>",
+    "api_token": "<%= @edgecast_api_token %>",
+    "media_base_uri": "<%= @edgecast_media_base_uri %>"
+  },
+  "limelight": {
+    "emailTo": "<%= @limelight_emailTo %>",
+    "emailType": "<%= @limelight_emailType %>",
+    "apiUrl": "http://control.llnw.com/purge-api/v1/",
+    "apiKey": "<%= @limelight_token %>",
+    "apiUser": "<%= @limelight_user %>"
+  }
 }
-
