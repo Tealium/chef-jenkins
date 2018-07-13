@@ -23,6 +23,8 @@ else
   env = 'development'
 end
 
+utui_dbi = data_bag_item('utui', env)
+
 directory "etc/tealium/urest" do
   action :create
   owner node[:jenkins][:server][:user]
@@ -46,7 +48,7 @@ node["urest_config"].each do |config|
       :tealium_tools_package  => node["urest_config"]["#{config.first}"]["tealium_tools_package"],
       :community_host         => node["urest_config"]["#{config.first}"]['community_host'],
       :as_maintenance         => node["urest_config"]["#{config.first}"]['as_maintenance'],
-      :utui_support_desk_url  => node["jenkins"]["utui"]["support_desk_url"]
+      :utui_support_desk_url  => utui_dbi.fetch('utui_support_desk_url')
      )
   end
 end
