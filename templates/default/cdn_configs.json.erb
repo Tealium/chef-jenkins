@@ -3,8 +3,7 @@
     "purge_dir": "<%= @purge_dir %>",
     "cdns": {
       "akamai": <%= @enable_cdns_akamai %>,
-      "edgecast": <%= @enable_cdns_edgecast %>,
-      "limelight": <%= @enable_cdns_limelight %>
+      "edgecast": <%= @enable_cdns_edgecast %>
     }
   },
   "akamai": {
@@ -17,12 +16,5 @@
     "account_id": "<%= @edgecast_account_id %>",
     "api_token": "<%= @edgecast_api_token %>",
     "media_base_uri": "<%= @edgecast_media_base_uri %>"
-  },
-  "limelight": {
-    "emailTo": "<%= @limelight_emailTo %>",
-    "emailType": "<%= @limelight_emailType %>",
-    "apiUrl": "http://control.llnw.com/purge-api/v1/",
-    "apiKey": "<%= @limelight_token %>",
-    "apiUser": "<%= @limelight_user %>"
   }
 }
