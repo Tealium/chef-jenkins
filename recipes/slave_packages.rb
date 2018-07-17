@@ -10,9 +10,15 @@ include_recipe "apt"
   xvfb
   mongodb-clients
   libxml2-utils
+  libasound2
+  libgtk-3-0
+  libxrender1
+  libxtst6
+  libxp6
+  libxi6
 ).each do |pak|
   package pak do 
-   action :install 
+   action :install
   end
 end
 
