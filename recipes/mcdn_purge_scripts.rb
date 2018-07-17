@@ -80,7 +80,6 @@ node[:jenkins][:mcdn_purge].each do |environment|
      'purge_dir' => node[:jenkins][:mcdn_purge]["#{environment.first}"][:purge_dir],
      'enable_cdns_akamai' => node[:jenkins][:mcdn_purge]["#{environment.first}"][:cdns][:akamai],
      'enable_cdns_edgecast' => node[:jenkins][:mcdn_purge]["#{environment.first}"][:cdns][:edgecast],
-     'enable_cdns_limelight' => node[:jenkins][:mcdn_purge]["#{environment.first}"][:cdns][:limelight],
      'akamai_user' => node[:jenkins][:akamai][:user],
      'akamai_pass' => node[:jenkins][:akamai][:pass],
      'akamai_arl' => node[:jenkins][:akamai][:arl],
@@ -88,10 +87,6 @@ node[:jenkins][:mcdn_purge].each do |environment|
      'edgecast_account_id' => node[:jenkins][:edgecast][:account_id],
      'edgecast_api_token' => node[:jenkins][:edgecast][:api_token],
      'edgecast_media_base_uri' => node[:jenkins][:edgecast][:media_base_uri],
-     'limelight_emailTo' => node[:jenkins][:limelight][:emailTo],
-     'limelight_emailType' => node[:jenkins][:limelight][:emailType],
-     'limelight_token' => node[:jenkins][:limelight][:token],
-     'limelight_user' => node[:jenkins][:limelight][:user]
   )
   end
 end
