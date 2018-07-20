@@ -31,3 +31,9 @@ end
 package 'libonig2' do
   version '5.9.6-1'
 end
+
+directory "#{node[:jenkins][:server][:home]}/.config" do
+  recursive true
+  owner node[:jenkins][:server][:user]
+  group node[:jenkins][:server][:group]
+end
