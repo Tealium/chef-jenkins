@@ -36,4 +36,6 @@ directory "#{node[:jenkins][:server][:home]}/.config" do
   recursive true
   owner node[:jenkins][:server][:user]
   group node[:jenkins][:server][:group]
+  mode 0770
+  action :create
 end
