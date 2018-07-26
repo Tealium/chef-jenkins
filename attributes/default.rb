@@ -111,7 +111,7 @@ default[:jenkins][:node][:in_demand_delay] = 0
 default[:jenkins][:node][:idle_delay] = 1
 
 # utui support desk URL
-default[:jenkins][:utui][:support_desk_url] = ""
+default[:jenkins][:utui][:tealium_support_desk_url] = ""
 
 #"Node Properties"
 #[x] "Environment Variables"
