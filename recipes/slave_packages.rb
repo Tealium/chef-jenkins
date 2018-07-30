@@ -10,9 +10,15 @@ include_recipe "apt"
   xvfb
   mongodb-clients
   libxml2-utils
+  libasound2
+  libgtk-3-0
+  libxrender1
+  libxtst6
+  libxp6
+  libxi6
 ).each do |pak|
   package pak do 
-   action :install 
+   action :install
   end
 end
 
@@ -24,4 +30,12 @@ package 'jq' do
 end
 package 'libonig2' do
   version '5.9.6-1'
+end
+
+directory "#{node[:jenkins][:server][:home]}/.config" do
+  recursive true
+  owner node[:jenkins][:server][:user]
+  group node[:jenkins][:server][:group]
+  mode 0770
+  action :create
 end
