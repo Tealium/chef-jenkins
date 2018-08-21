@@ -17,6 +17,14 @@
 # limitations under the License.
 #
 
+unless node['instance_role'] == 'vagrant'
+  env = (node.environment =~ /^qa\d/) ? 'qa' : node.environment
+else
+  env = 'development'
+end
+
+utui_dbi = data_bag_item('utui', env)
+
 directory "etc/tealium/urest" do
   action :create
   owner node[:jenkins][:server][:user]
@@ -39,7 +47,8 @@ node["urest_config"].each do |config|
       :recurly_subdomain      => node["urest_config"]["#{config.first}"]["recurly_subdomain"],
       :tealium_tools_package  => node["urest_config"]["#{config.first}"]["tealium_tools_package"],
       :community_host         => node["urest_config"]["#{config.first}"]['community_host'],
-      :as_maintenance         => node["urest_config"]["#{config.first}"]['as_maintenance']
+      :as_maintenance         => node["urest_config"]["#{config.first}"]['as_maintenance'],
+      :tealium_support_desk_url  => utui_dbi.fetch('tealium_support_desk_url')
      )
   end
 end
