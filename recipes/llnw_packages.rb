@@ -88,14 +88,6 @@ node["update_llnw"].each do |environment|
 
      variables(
       :source_dir              => node["update_llnw"]["#{environment.first}"]["source_dirs"],
-      :llnw_ftp_username       => node["update_llnw"]["#{environment.first}"]["llnw"]["ftp"]["username"],
-      :llnw_ftp_password       => node["update_llnw"]["#{environment.first}"]["llnw"]["ftp"]["password"],
-      :llnw_ftp_url            => node["update_llnw"]["#{environment.first}"]["llnw"]["ftp"]["url"],
-      :llnw_shortname          => node["update_llnw"]["#{environment.first}"]["llnw"]["shortname"],
-      :llnw_username           => node["update_llnw"]["#{environment.first}"]["llnw"]["username"],
-      :llnw_password           => node["update_llnw"]["#{environment.first}"]["llnw"]["password"],
-      :llnw_url                => node["update_llnw"]["#{environment.first}"]["llnw"]["url"],
-      :llnw_prepend_dir        => node["update_llnw"]["#{environment.first}"]["llnw"]["prepend_dir"],
       :akamai_ftp_username     => node["update_llnw"]["#{environment.first}"]["akamai"]["ftp"]["username"],
       :akamai_ftp_password     => node["update_llnw"]["#{environment.first}"]["akamai"]["ftp"]["password"],
       :akamai_ftp_url          => node["update_llnw"]["#{environment.first}"]["akamai"]["ftp"]["url"],
