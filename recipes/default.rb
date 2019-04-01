@@ -132,8 +132,8 @@ ruby_block 'netstat' do
   block do
     10.times do
       if IO.popen('netstat -lnt').entries.select do |entry|
-          entry.split[3] =~ /:#{node[:jenkins][:server][:port]}$/
-         end.size == 0
+           entry.split[3] =~ /:#{node[:jenkins][:server][:port]}$/
+         end.empty?
         break
       end
 
@@ -152,9 +152,7 @@ end
 
 ruby_block 'block_until_operational' do
   block do
-    until IO.popen('netstat -lnt').entries.select do |entry|
-        entry.split[3] =~ /:#{node[:jenkins][:server][:port]}$/
-          end.size == 1
+    until IO.popen('netstat -lnt').entries.select { |entry| entry.split[3] =~ /:#{node[:jenkins][:server][:port]}$/ }.size == 1
       Chef::Log.debug "service[jenkins] not listening on port #{node.jenkins.server.port}"
       sleep 1
     end
@@ -178,7 +176,7 @@ if node.platform == 'ubuntu'
     notifies :create, 'ruby_block[netstat]', :immediately # wait a moment for the port to be released
     notifies :run, 'execute[add-jenkins-key]', :immediately
     notifies :install, 'package[jenkins]', :immediately
-    notifies :start, "service[jenkins]", :immediately unless install_starts_service
+    notifies :start, 'service[jenkins]', :immediately unless install_starts_service
     notifies :create, 'ruby_block[block_until_operational]', :immediately
     creates '/usr/share/jenkins/jenkins.war'
   end
@@ -192,10 +190,8 @@ else
     notifies :create, 'ruby_block[netstat]', :immediately # wait a moment for the port to be released
     notifies :run, 'execute[add-jenkins-key]', :immediately
     notifies :install, 'package[jenkins]', :immediately
-    notifies :start, "service[jenkins]", :immediately unless install_starts_service
-    if node[:jenkins][:server][:use_head] # XXX remove when CHEF-1848 is merged
-      action :nothing
-    end
+    notifies :start, 'service[jenkins]', :immediately unless install_starts_service
+    action :nothing if node[:jenkins][:server][:use_head] # XXX remove when CHEF-1848 is merged
   end
 
   http_request "HEAD #{remote}" do
@@ -203,9 +199,7 @@ else
     message ''
     url remote
     action :head
-    if File.exist?(local)
-      headers 'If-Modified-Since' => File.mtime(local).httpdate
-    end
+    headers 'If-Modified-Since' => File.mtime(local).httpdate if File.exist?(local)
     notifies :create, "remote_file[#{local}]", :immediately
   end
 end
@@ -228,9 +222,9 @@ log 'plugins updated, restarting jenkins' do
   only_if do
     if File.exist?(pid_file)
       htime = File.mtime(pid_file)
-      Dir["#{node[:jenkins][:server][:home]}/plugins/*.hpi"].select do |file|
+      !Dir["#{node[:jenkins][:server][:home]}/plugins/*.hpi"].select do |file|
         File.mtime(file) > htime
-      end.size > 0
+      end.empty?
     end
   end
 
