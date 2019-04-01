@@ -55,7 +55,7 @@ if Chef::Config[:solo]
     jenkins_slave_hosts = node[:jenkins_slaves_manually_specified]
 else
     jenkins_slave_hosts = search(:node, search_string)
-    Chef::Log.warn("#{log_header}I got this result set back from search #{jenkins_slave_hosts}")
+    Chef::Log.debug("#{log_header}I got this result set back from search #{jenkins_slave_hosts}")
     if jenkins_slave_hosts.nil? || jenkins_slave_hosts.empty? then
         Chef::Log.error("#{log_header}Didn't find any hosts with search string #{search_string} won't create any rsync cron tasks to sync out data to jenkins slave hosts")
     else
