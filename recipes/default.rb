@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # Cookbook Name:: jenkins
 # Based on hudson
@@ -22,32 +24,29 @@
 # limitations under the License.
 #
 
-tmp = "/tmp"
+tmp = '/tmp'
 
 group node[:jenkins][:server][:group] do
+  not_if 'getent passwd jenkins'
 end
 
 user node[:jenkins][:server][:user] do
   home node[:jenkins][:server][:home]
+  not_if 'getent passwd jenkins'
 end
 
 directory node[:jenkins][:server][:home] do
   recursive true
   owner node[:jenkins][:server][:user]
   group node[:jenkins][:server][:group]
+  not_if "test -L #{node[:jenkins][:server][:home]}"
 end
 
-
-if node[:jenkins][:deploy_ssh] then
-include_recipe 'chef-jenkins::deploy_ssh'
-end
-
-
-#Install plugins
+# Install plugins
 directory "#{node[:jenkins][:server][:home]}/plugins" do
   owner node[:jenkins][:server][:user]
   group node[:jenkins][:server][:group]
-  only_if { node[:jenkins][:server][:plugins].size > 0 }
+  only_if { !node[:jenkins][:server][:plugins].empty? }
 end
 
 node[:jenkins][:server][:plugins].each do |name|
@@ -61,83 +60,83 @@ node[:jenkins][:server][:plugins].each do |name|
 end
 
 case node.platform
-when "ubuntu", "debian"
+when 'ubuntu', 'debian'
   # See http://jenkins-ci.org/debian/
 
   case node.platform
-  when "debian"
+  when 'debian'
     remote = "#{node[:jenkins][:mirror]}/latest/debian/jenkins.deb"
     package_provider = Chef::Provider::Package::Dpkg
 
-    package "daemon"
+    package 'daemon'
     # These are both dependencies of the jenkins deb package
-    package "jamvm"
-    package "openjdk-7-jre"
+    package 'jamvm'
+    package 'openjdk-7-jre'
 
-    package "psmisc"
-    key_url = "http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key"
+    package 'psmisc'
+    key_url = 'http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key'
 
     remote_file "#{tmp}/jenkins-ci.org.key" do
-      source "#{key_url}"
+      source key_url.to_s
     end
 
-    execute "add-jenkins-key" do
+    execute 'add-jenkins-key' do
       command "apt-key add #{tmp}/jenkins-ci.org.key"
       action :nothing
     end
 
-  when "ubuntu"
-    key_url = "http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key"
+  when 'ubuntu'
+    key_url = 'http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key'
 
-    include_recipe "apt"
-    include_recipe "java"
+    include_recipe 'apt'
+    include_recipe 'java'
 
-    cookbook_file "/etc/apt/sources.list.d/jenkins.list" do
-      owner "root"
-      group "root"
-      mode  "0644"
+    cookbook_file '/etc/apt/sources.list.d/jenkins.list' do
+      owner 'root'
+      group 'root'
+      mode  '0644'
     end
 
-    execute "add-jenkins-key" do
+    execute 'add-jenkins-key' do
       command "wget -q -O - #{key_url} | sudo apt-key add -"
       action :nothing
-      notifies :run, "execute[apt-get update]", :immediately
+      notifies :run, 'execute[apt-get update]', :immediately
     end
   end
 
-  pid_file = "/var/run/jenkins/jenkins.pid"
+  pid_file = '/var/run/jenkins/jenkins.pid'
   install_starts_service = true
 
+when 'centos', 'redhat'
+  include_recipe 'yum'
 
-when "centos", "redhat"
-  include_recipe "yum"
-
-  pid_file = "/var/run/jenkins.pid"
+  pid_file = '/var/run/jenkins.pid'
   install_starts_service = false
 
-  yum_key "jenkins" do
+  yum_key 'jenkins' do
     url "#{node.jenkins.package_url}/redhat/jenkins-ci.org.key"
     action :add
   end
 
-  yum_repository "jenkins" do
-    description "repository for jenkins"
+  yum_repository 'jenkins' do
+    description 'repository for jenkins'
     url "#{node.jenkins.package_url}/redhat/"
-    key "jenkins"
+    key 'jenkins'
     action :add
   end
 end
 
-#"jenkins stop" may (likely) exit before the process is actually dead
-#so we sleep until nothing is listening on jenkins.server.port (according to netstat)
-ruby_block "netstat" do
+# "jenkins stop" may (likely) exit before the process is actually dead
+# so we sleep until nothing is listening on jenkins.server.port (according to netstat)
+ruby_block 'netstat' do
   block do
     10.times do
-      if IO.popen("netstat -lnt").entries.select { |entry|
+      if IO.popen('netstat -lnt').entries.select do |entry|
           entry.split[3] =~ /:#{node[:jenkins][:server][:port]}$/
-        }.size == 0
+         end.size == 0
         break
       end
+
       Chef::Log.debug("service[jenkins] still listening (port #{node[:jenkins][:server][:port]})")
       sleep 1
     end
@@ -145,17 +144,17 @@ ruby_block "netstat" do
   action :nothing
 end
 
-service "jenkins" do
-  supports [ :stop, :start, :restart, :status ]
+service 'jenkins' do
+  supports %i[stop start restart status]
   status_command "test -f #{pid_file} && kill -0 `cat #{pid_file}`"
   action :nothing
 end
 
-ruby_block "block_until_operational" do
+ruby_block 'block_until_operational' do
   block do
-    until IO.popen("netstat -lnt").entries.select { |entry|
+    until IO.popen('netstat -lnt').entries.select do |entry|
         entry.split[3] =~ /:#{node[:jenkins][:server][:port]}$/
-      }.size == 1
+          end.size == 1
       Chef::Log.debug "service[jenkins] not listening on port #{node.jenkins.server.port}"
       sleep 1
     end
@@ -163,7 +162,8 @@ ruby_block "block_until_operational" do
     loop do
       url = URI.parse("#{node.jenkins.server.url}/job/test/config.xml")
       res = Chef::REST::RESTRequest.new(:GET, url, nil).call
-      break if res.kind_of?(Net::HTTPSuccess) or res.kind_of?(Net::HTTPNotFound)
+      break if res.is_a?(Net::HTTPSuccess) || res.is_a?(Net::HTTPNotFound)
+
       Chef::Log.debug "service[jenkins] not responding OK to GET / #{res.inspect}"
       sleep 1
     end
@@ -171,18 +171,16 @@ ruby_block "block_until_operational" do
   action :nothing
 end
 
-if node.platform == "ubuntu"
-  execute "setup-jenkins" do
-    command "echo w00t"
-    notifies :stop, "service[jenkins]", :immediately
-    notifies :create, "ruby_block[netstat]", :immediately #wait a moment for the port to be released
-    notifies :run, "execute[add-jenkins-key]", :immediately
-    notifies :install, "package[jenkins]", :immediately
-    unless install_starts_service
-      notifies :start, "service[jenkins]", :immediately
-    end
-    notifies :create, "ruby_block[block_until_operational]", :immediately
-    creates "/usr/share/jenkins/jenkins.war"
+if node.platform == 'ubuntu'
+  execute 'setup-jenkins' do
+    command 'echo w00t'
+    notifies :stop, 'service[jenkins]', :immediately
+    notifies :create, 'ruby_block[netstat]', :immediately # wait a moment for the port to be released
+    notifies :run, 'execute[add-jenkins-key]', :immediately
+    notifies :install, 'package[jenkins]', :immediately
+    notifies :start, "service[jenkins]", :immediately unless install_starts_service
+    notifies :create, 'ruby_block[block_until_operational]', :immediately
+    creates '/usr/share/jenkins/jenkins.war'
   end
 else
   local = File.join(tmp, File.basename(remote))
@@ -190,51 +188,49 @@ else
   remote_file local do
     source remote
     backup false
-    notifies :stop, "service[jenkins]", :immediately
-    notifies :create, "ruby_block[netstat]", :immediately #wait a moment for the port to be released
-    notifies :run, "execute[add-jenkins-key]", :immediately
-    notifies :install, "package[jenkins]", :immediately
-    unless install_starts_service
-      notifies :start, "service[jenkins]", :immediately
-    end
-    if node[:jenkins][:server][:use_head] #XXX remove when CHEF-1848 is merged
+    notifies :stop, 'service[jenkins]', :immediately
+    notifies :create, 'ruby_block[netstat]', :immediately # wait a moment for the port to be released
+    notifies :run, 'execute[add-jenkins-key]', :immediately
+    notifies :install, 'package[jenkins]', :immediately
+    notifies :start, "service[jenkins]", :immediately unless install_starts_service
+    if node[:jenkins][:server][:use_head] # XXX remove when CHEF-1848 is merged
       action :nothing
     end
   end
 
   http_request "HEAD #{remote}" do
-    only_if { node[:jenkins][:server][:use_head] } #XXX remove when CHEF-1848 is merged
-    message ""
+    only_if { node[:jenkins][:server][:use_head] } # XXX remove when CHEF-1848 is merged
+    message ''
     url remote
     action :head
-    if File.exists?(local)
-      headers "If-Modified-Since" => File.mtime(local).httpdate
+    if File.exist?(local)
+      headers 'If-Modified-Since' => File.mtime(local).httpdate
     end
     notifies :create, "remote_file[#{local}]", :immediately
   end
 end
 
-#this is defined after http_request/remote_file because the package
-#providers will throw an exception if `source' doesn't exist
-package "jenkins" do
+# this is defined after http_request/remote_file because the package
+# providers will throw an exception if `source' doesn't exist
+package 'jenkins' do
   provider package_provider
-  source local if node.platform != "ubuntu"
+  source local if node.platform != 'ubuntu'
   action :nothing
 end
 
 # restart if this run only added new plugins
-log "plugins updated, restarting jenkins" do
-  #ugh :restart does not work, need to sleep after stop.
-  notifies :stop, "service[jenkins]", :immediately
-  notifies :create, "ruby_block[netstat]", :immediately
-  notifies :start, "service[jenkins]", :immediately
-  notifies :create, "ruby_block[block_until_operational]", :immediately
+log 'plugins updated, restarting jenkins' do
+  # ugh :restart does not work, need to sleep after stop.
+  notifies :stop, 'service[jenkins]', :immediately
+  notifies :create, 'ruby_block[netstat]', :immediately
+  notifies :start, 'service[jenkins]', :immediately
+  notifies :create, 'ruby_block[block_until_operational]', :immediately
   only_if do
-    if File.exists?(pid_file)
+    if File.exist?(pid_file)
       htime = File.mtime(pid_file)
-      Dir["#{node[:jenkins][:server][:home]}/plugins/*.hpi"].select { |file|
+      Dir["#{node[:jenkins][:server][:home]}/plugins/*.hpi"].select do |file|
         File.mtime(file) > htime
-      }.size > 0
+      end.size > 0
     end
   end
 
@@ -243,16 +239,16 @@ end
 
 # Front Jenkins with an HTTP server
 case node[:jenkins][:http_proxy][:variant]
-when "nginx"
-  include_recipe "jenkins::proxy_nginx"
-when "apache2"
-  include_recipe "jenkins::proxy_apache2"
+when 'nginx'
+  include_recipe 'jenkins::proxy_nginx'
+when 'apache2'
+  include_recipe 'jenkins::proxy_apache2'
 end
 
-if node.jenkins.iptables_allow == "enable"
-  include_recipe "iptables"
-  iptables_rule "port_jenkins" do
-    if node[:jenkins][:iptables_allow] == "enable"
+if node.jenkins.iptables_allow == 'enable'
+  include_recipe 'iptables'
+  iptables_rule 'port_jenkins' do
+    if node[:jenkins][:iptables_allow] == 'enable'
       enable true
     else
       enable false

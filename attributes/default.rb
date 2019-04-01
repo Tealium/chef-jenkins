@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # Cookbook Name:: jenkins
 # Based on hudson
@@ -21,89 +23,83 @@
 # limitations under the License.
 #
 
-default[:jenkins][:mirror] = "http://mirrors.jenkins-ci.org"
-default[:jenkins][:package_url] = "http://pkg.jenkins-ci.org"
+default[:jenkins][:mirror] = 'http://mirrors.jenkins-ci.org'
+default[:jenkins][:package_url] = 'http://pkg.jenkins-ci.org'
 default[:jenkins][:java_home] = ENV['JAVA_HOME']
 
-default[:jenkins][:server][:home] = "/var/lib/jenkins"
-default[:jenkins][:server][:user] = "jenkins"
+default[:jenkins][:server][:home] = '/var/lib/jenkins'
+default[:jenkins][:server][:user] = 'jenkins'
+default[:jenkins][:server][:group] = 'jenkins'
 
-default[:jenkins][:jently] = "/var/lib/Jently"
-
-case node[:platform]
-when "debian", "ubuntu"
-  default[:jenkins][:server][:group] = "jenkins"
-else
-  default[:jenkins][:server][:group] = node[:jenkins][:server][:user]
-end
+default[:jenkins][:jently] = '/var/lib/Jently'
 
 default[:jenkins][:server][:port] = 8080
 default[:jenkins][:server][:host] = node[:fqdn]
 default[:jenkins][:server][:url]  = "http://#{node[:jenkins][:server][:host]}:#{node[:jenkins][:server][:port]}"
 
-default[:jenkins][:iptables_allow] = "disable"
+default[:jenkins][:iptables_allow] = 'disable'
 
-#download the latest version of plugins, bypassing update center
-#example: ["git", "URLSCM", ...]
-default[:jenkins][:server][:plugins] = ["git", "github", "ghprb", "github-api", "multiple-scms", "ec2","maven-plugin", "maven-dependency-update-trigger", "chucknorris", "build-pipeline-plugin",
-                                       "ruby-runtime", "ruby", "scp", "ssh", "ssh-credentials", "publish-over-ssh", "seleniumrc-plugin", "selenium", "seleniumhq", "xvnc", "seleniumhtmlreport",
-                                       "email-ext", "translation", "selenium-aes", "testingbot", "maven-invoker-plugin"]
+# download the latest version of plugins, bypassing update center
+# example: ["git", "URLSCM", ...]
+default[:jenkins][:server][:plugins] = %w[
+  git github ghprb github-api multiple-scms ec2 maven-plugin maven-dependency-update-trigger chucknorris
+  build-pipeline-plugin ruby-runtime ruby scp ssh ssh-credentials publish-over-ssh seleniumrc-plugin selenium
+  seleniumhq xvnc seleniumhtmlreport email-ext translation selenium-aes testingbot maven-invoker-plugin
+]
 
-#working around: http://tickets.opscode.com/browse/CHEF-1848
-#set to true if you have the CHEF-1848 patch applied
+# working around: http://tickets.opscode.com/browse/CHEF-1848
+# set to true if you have the CHEF-1848 patch applied
 default[:jenkins][:server][:use_head] = false
 
-
-default[:jenkins][:deploy_ssh]  = true
-default[:jenkins][:profile_name]  = "development"
+default[:jenkins][:profile_name] = 'development'
 default[:jenkins][:server][:public_key] = nil
 default[:jenkins][:server][:private_key] = nil
 
-#See Jenkins >> Nodes >> $name >> Configure
+# See Jenkins >> Nodes >> $name >> Configure
 
-#"Name"
+# "Name"
 default[:jenkins][:node][:name] = node[:fqdn]
 
-#"Description"
+# "Description"
 default[:jenkins][:node][:description] =
-  "#{node[:platform]} #{node[:platform_version]} " <<
-  "[#{node[:kernel][:os]} #{node[:kernel][:release]} #{node[:kernel][:machine]}] " <<
+  "#{node[:platform]} #{node[:platform_version]} " \
+  "[#{node[:kernel][:os]} #{node[:kernel][:release]} #{node[:kernel][:machine]}] " \
   "slave on #{node[:hostname]}"
 
-#"# of executors"
+# "# of executors"
 default[:jenkins][:node][:executors] = 1
 
-#"Remote FS root"
-if node[:os] == "windows"
-  default[:jenkins][:node][:home] = "C:/jenkins"
-elsif node[:os] == "darwin"
-  default[:jenkins][:node][:home] = "/Users/jenkins"
-else
-  default[:jenkins][:node][:home] = "/home/jenkins"
-end
+# "Remote FS root"
+default[:jenkins][:node][:home] = if node[:os] == 'windows'
+                                    'C:/jenkins'
+                                  elsif node[:os] == 'darwin'
+                                    '/Users/jenkins'
+                                  else
+                                    '/home/jenkins'
+                                  end
 
-#"Labels"
-default[:jenkins][:node][:labels] = (node[:tags] || []).join(" ")
+# "Labels"
+default[:jenkins][:node][:labels] = (node[:tags] || []).join(' ')
 
-#"Usage"
+# "Usage"
 #  "Utilize this slave as much as possible" -> "normal"
 #  "Leave this machine for tied jobs only"  -> "exclusive"
-default[:jenkins][:node][:mode] = "normal"
+default[:jenkins][:node][:mode] = 'normal'
 
-#"Launch method"
+# "Launch method"
 #  "Launch slave agents via JNLP"                        -> "jnlp"
 #  "Launch slave via execution of command on the Master" -> "command"
 #  "Launch slave agents on Unix machines via SSH"         -> "ssh"
-if node[:os] == "windows"
-  default[:jenkins][:node][:launcher] = "jnlp"
-else
-  default[:jenkins][:node][:launcher] = "ssh"
-end
+default[:jenkins][:node][:launcher] = if node[:os] == 'windows'
+                                        'jnlp'
+                                      else
+                                        'ssh'
+                                      end
 
-#"Availability"
+# "Availability"
 #  "Keep this slave on-line as much as possible"                   -> "always"
 #  "Take this slave on-line when in demand and off-line when idle" -> "demand"
-default[:jenkins][:node][:availability] = "always"
+default[:jenkins][:node][:availability] = 'always'
 
 #  "In demand delay"
 default[:jenkins][:node][:in_demand_delay] = 0
@@ -111,28 +107,28 @@ default[:jenkins][:node][:in_demand_delay] = 0
 default[:jenkins][:node][:idle_delay] = 1
 
 # utui support desk URL
-default[:jenkins][:utui][:tealium_support_desk_url] = ""
+default[:jenkins][:utui][:tealium_support_desk_url] = ''
 
-#"Node Properties"
-#[x] "Environment Variables"
+# "Node Properties"
+# [x] "Environment Variables"
 default[:jenkins][:node][:env] = nil
 
-default[:jenkins][:node][:user] = "jenkins-node"
+default[:jenkins][:node][:user] = 'jenkins-node'
 
-#SSH options
+# SSH options
 default[:jenkins][:node][:ssh_host] = node[:fqdn]
 default[:jenkins][:node][:ssh_port] = 22
 default[:jenkins][:node][:ssh_user] = default[:jenkins][:node][:user]
 default[:jenkins][:node][:ssh_pass] = nil
 default[:jenkins][:node][:jvm_options] = nil
-#jenkins master defaults to: "#{ENV['HOME']}/.ssh/id_rsa"
+# jenkins master defaults to: "#{ENV['HOME']}/.ssh/id_rsa"
 default[:jenkins][:node][:ssh_private_key] = nil
 
 default[:jenkins][:http_proxy][:variant]              = nil
-default[:jenkins][:http_proxy][:www_redirect]         = "enable"
-default[:jenkins][:http_proxy][:listen_ports]         = [ 80 ]
+default[:jenkins][:http_proxy][:www_redirect]         = 'enable'
+default[:jenkins][:http_proxy][:listen_ports]         = [80]
 default[:jenkins][:http_proxy][:host_name]            = nil
 default[:jenkins][:http_proxy][:host_aliases]         = []
-default[:jenkins][:http_proxy][:client_max_body_size] = "1024m"
-default[:jenkins][:http_proxy][:basic_auth_username] = "jenkins"
-default[:jenkins][:http_proxy][:basic_auth_password] = "jenkins"
+default[:jenkins][:http_proxy][:client_max_body_size] = '1024m'
+default[:jenkins][:http_proxy][:basic_auth_username] = 'jenkins'
+default[:jenkins][:http_proxy][:basic_auth_password] = 'jenkins'
